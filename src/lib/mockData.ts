@@ -15,6 +15,8 @@ export interface Message {
   reactions?: { emoji: string; count: number }[];
   replyTo?: string;
   isRead?: boolean;
+  isBookmarked?: boolean;
+  selfDestruct?: number;
 }
 
 export interface Conversation {

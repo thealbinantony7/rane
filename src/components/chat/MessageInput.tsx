@@ -1,20 +1,33 @@
 import { useState, useRef, KeyboardEvent } from 'react';
-import { motion } from 'framer-motion';
-import { Smile, Paperclip, Mic, Send, Image as ImageIcon, AtSign } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Smile, Paperclip, Mic, Send, Image as ImageIcon, Timer, Code } from 'lucide-react';
+import { EmojiPicker } from './EmojiPicker';
 import { cn } from '@/lib/utils';
 
 interface MessageInputProps {
-  onSendMessage: (content: string) => void;
+  onSendMessage: (content: string, options?: { selfDestruct?: number }) => void;
+  onStartVoiceRecording: () => void;
+  onOpenMediaUpload: () => void;
+  selfDestructTimer: number | null;
+  onOpenTimerSettings: () => void;
 }
 
-export function MessageInput({ onSendMessage }: MessageInputProps) {
+export function MessageInput({ 
+  onSendMessage, 
+  onStartVoiceRecording,
+  onOpenMediaUpload,
+  selfDestructTimer,
+  onOpenTimerSettings,
+}: MessageInputProps) {
   const [message, setMessage] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showFormatHint, setShowFormatHint] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = () => {
     if (message.trim()) {
-      onSendMessage(message.trim());
+      onSendMessage(message.trim(), selfDestructTimer ? { selfDestruct: selfDestructTimer } : undefined);
       setMessage('');
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
@@ -38,19 +51,58 @@ export function MessageInput({ onSendMessage }: MessageInputProps) {
     }
   };
 
-  const actionButtons = [
-    { icon: Smile, label: 'Emoji' },
-    { icon: AtSign, label: 'Mention' },
-    { icon: ImageIcon, label: 'Image' },
-    { icon: Paperclip, label: 'Attach' },
-  ];
+  const insertMarkdown = (syntax: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = message.substring(start, end);
+    
+    let newText = '';
+    let cursorOffset = 0;
+
+    if (syntax === 'code') {
+      if (selectedText.includes('\n')) {
+        newText = `\`\`\`\n${selectedText}\n\`\`\``;
+        cursorOffset = 4;
+      } else {
+        newText = `\`${selectedText}\``;
+        cursorOffset = 1;
+      }
+    } else if (syntax === 'bold') {
+      newText = `**${selectedText}**`;
+      cursorOffset = 2;
+    }
+
+    const updatedMessage = message.substring(0, start) + newText + message.substring(end);
+    setMessage(updatedMessage);
+    
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + cursorOffset, start + cursorOffset + selectedText.length);
+    }, 0);
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    setMessage(prev => prev + emoji);
+    textareaRef.current?.focus();
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-4 border-t border-border bg-card/50 backdrop-blur-xl"
+      className="p-4 border-t border-border bg-card/50 backdrop-blur-xl relative"
     >
+      {/* Self-destruct indicator */}
+      {selfDestructTimer && (
+        <div className="flex items-center gap-2 px-3 py-2 mb-2 bg-destructive/10 rounded-lg text-sm text-destructive">
+          <Timer className="w-4 h-4" />
+          <span>Messages will self-destruct after {selfDestructTimer}s</span>
+        </div>
+      )}
+
       <div
         className={cn(
           'flex items-end gap-2 p-2 rounded-2xl bg-surface-2 border border-transparent transition-all duration-200',
@@ -59,17 +111,58 @@ export function MessageInput({ onSendMessage }: MessageInputProps) {
       >
         {/* Action Buttons */}
         <div className="flex items-center gap-0.5 pb-1">
-          {actionButtons.map(({ icon: Icon, label }) => (
+          <div className="relative">
             <motion.button
-              key={label}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
               className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
-              title={label}
+              title="Emoji"
             >
-              <Icon className="w-5 h-5" />
+              <Smile className="w-5 h-5" />
             </motion.button>
-          ))}
+            <EmojiPicker
+              isOpen={showEmojiPicker}
+              onClose={() => setShowEmojiPicker(false)}
+              onSelect={handleEmojiSelect}
+              position="top"
+            />
+          </div>
+          
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => insertMarkdown('code')}
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
+            title="Code block"
+          >
+            <Code className="w-5 h-5" />
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={onOpenMediaUpload}
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
+            title="Attach files"
+          >
+            <Paperclip className="w-5 h-5" />
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={onOpenTimerSettings}
+            className={cn(
+              'p-2 rounded-lg transition-colors',
+              selfDestructTimer 
+                ? 'text-destructive bg-destructive/10' 
+                : 'text-muted-foreground hover:text-foreground hover:bg-surface-3'
+            )}
+            title="Self-destruct timer"
+          >
+            <Timer className="w-5 h-5" />
+          </motion.button>
         </div>
 
         {/* Input */}
@@ -80,7 +173,7 @@ export function MessageInput({ onSendMessage }: MessageInputProps) {
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder="Type a message..."
+          placeholder="Type a message... (supports **markdown** and `code`)"
           rows={1}
           className="flex-1 bg-transparent border-none outline-none resize-none text-foreground placeholder:text-muted-foreground py-2 px-2 max-h-[150px] text-[15px] leading-relaxed"
         />
@@ -102,6 +195,7 @@ export function MessageInput({ onSendMessage }: MessageInputProps) {
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              onClick={onStartVoiceRecording}
               className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
               title="Voice message"
             >
@@ -113,8 +207,8 @@ export function MessageInput({ onSendMessage }: MessageInputProps) {
 
       {/* Hint */}
       <p className="text-xs text-muted-foreground/60 mt-2 text-center">
-        Press <kbd className="px-1.5 py-0.5 rounded bg-surface-3 font-mono text-[10px]">Enter</kbd> to send,{' '}
-        <kbd className="px-1.5 py-0.5 rounded bg-surface-3 font-mono text-[10px]">Shift + Enter</kbd> for new line
+        Press <kbd className="px-1.5 py-0.5 rounded bg-surface-3 font-mono text-[10px]">Enter</kbd> to send • 
+        Use <kbd className="px-1.5 py-0.5 rounded bg-surface-3 font-mono text-[10px]">**bold**</kbd> and <kbd className="px-1.5 py-0.5 rounded bg-surface-3 font-mono text-[10px]">`code`</kbd> for formatting
       </p>
     </motion.div>
   );
