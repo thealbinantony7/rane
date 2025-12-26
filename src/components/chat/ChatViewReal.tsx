@@ -138,10 +138,10 @@ export function ChatViewReal({ conversation, onToggleInfo, onCall, profiles }: C
 
       {/* AI Summary Button */}
       <motion.button
-        whileHover={{ scale: 1.02 }}
+        whileHover={{ scale: 1.03, y: -1 }}
         whileTap={{ scale: 0.97 }}
         onClick={() => setShowAISummary(true)}
-        className="absolute top-20 right-4 z-10 flex items-center gap-2 px-4 py-2 rounded-full bg-surface-2/80 vibrancy border border-border/30 text-foreground text-sm font-medium hover:bg-surface-3/80 transition-all duration-200 shadow-apple-sm"
+        className="absolute top-20 right-4 z-10 flex items-center gap-2 px-4 py-2.5 rounded-full liquid-glass text-foreground text-sm font-medium hover-lift press-effect"
       >
         <Sparkles className="w-4 h-4 text-primary" />
         AI Summary

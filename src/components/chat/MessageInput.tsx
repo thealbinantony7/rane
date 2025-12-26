@@ -93,7 +93,7 @@ export function MessageInput({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-4 border-t border-border/50 bg-card/30 vibrancy relative"
+      className="p-4 border-t border-border/30 liquid-glass relative"
     >
       {/* Self-destruct indicator */}
       {selfDestructTimer && (
@@ -105,8 +105,8 @@ export function MessageInput({
 
       <div
         className={cn(
-          'flex items-end gap-2 p-2.5 rounded-2xl bg-surface-2/80 border border-border/30 transition-all duration-300',
-          isFocused && 'border-primary/40 shadow-apple bg-surface-2'
+          'flex items-end gap-2 p-2.5 rounded-2xl bg-surface-2/60 border border-border/20 transition-all duration-300',
+          isFocused && 'border-primary/30 shadow-glass bg-surface-2/80'
         )}
       >
         {/* Action Buttons */}
