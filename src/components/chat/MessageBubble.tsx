@@ -1,16 +1,40 @@
-import { motion } from 'framer-motion';
-import { Check, CheckCheck } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Check, CheckCheck, Reply, Smile, Bookmark, MoreHorizontal, Timer, Mic, Play, Pause } from 'lucide-react';
 import { Message, formatMessageTime, users, currentUser } from '@/lib/mockData';
+import { MarkdownRenderer } from './MarkdownRenderer';
+import { EmojiPicker } from './EmojiPicker';
 import { cn } from '@/lib/utils';
 
 interface MessageBubbleProps {
   message: Message;
   isOwnMessage: boolean;
   showAvatar?: boolean;
+  onReply?: (message: Message) => void;
+  onReact?: (messageId: string, emoji: string) => void;
+  onBookmark?: (messageId: string) => void;
+  replyToMessage?: Message;
 }
 
-export function MessageBubble({ message, isOwnMessage, showAvatar = true }: MessageBubbleProps) {
+export function MessageBubble({ 
+  message, 
+  isOwnMessage, 
+  showAvatar = true,
+  onReply,
+  onReact,
+  onBookmark,
+  replyToMessage,
+}: MessageBubbleProps) {
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showActions, setShowActions] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const sender = isOwnMessage ? currentUser : users.find(u => u.id === message.senderId);
+  const replySender = replyToMessage 
+    ? (replyToMessage.senderId === currentUser.id ? currentUser : users.find(u => u.id === replyToMessage.senderId))
+    : null;
+
+  const isVoiceMessage = message.content.startsWith('[Voice message');
+  const hasMarkdown = message.content.includes('```') || message.content.includes('**') || message.content.includes('`');
 
   return (
     <motion.div
@@ -18,9 +42,14 @@ export function MessageBubble({ message, isOwnMessage, showAvatar = true }: Mess
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       className={cn(
-        'flex gap-2 max-w-[75%] group',
+        'flex gap-2 max-w-[75%] group relative',
         isOwnMessage ? 'ml-auto flex-row-reverse' : 'mr-auto'
       )}
+      onMouseEnter={() => setShowActions(true)}
+      onMouseLeave={() => {
+        setShowActions(false);
+        setShowEmojiPicker(false);
+      }}
     >
       {/* Avatar */}
       {showAvatar && !isOwnMessage && (
@@ -33,6 +62,20 @@ export function MessageBubble({ message, isOwnMessage, showAvatar = true }: Mess
       {!showAvatar && !isOwnMessage && <div className="w-8 flex-shrink-0" />}
 
       <div className={cn('flex flex-col', isOwnMessage ? 'items-end' : 'items-start')}>
+        {/* Reply reference */}
+        {replyToMessage && (
+          <div className={cn(
+            'flex items-center gap-2 px-3 py-1.5 mb-1 rounded-lg bg-surface-2/50 text-xs',
+            isOwnMessage ? 'mr-2' : 'ml-2'
+          )}>
+            <Reply className="w-3 h-3 text-primary" />
+            <span className="text-primary font-medium">{replySender?.name}</span>
+            <span className="text-muted-foreground truncate max-w-[150px]">
+              {replyToMessage.content}
+            </span>
+          </div>
+        )}
+
         {/* Message Content */}
         <div
           className={cn(
@@ -42,9 +85,62 @@ export function MessageBubble({ message, isOwnMessage, showAvatar = true }: Mess
               : 'bg-message-other text-card-foreground rounded-bl-md'
           )}
         >
-          <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">
-            {message.content}
-          </p>
+          {/* Self-destruct indicator */}
+          {message.selfDestruct && (
+            <div className="flex items-center gap-1 text-xs text-destructive/70 mb-1">
+              <Timer className="w-3 h-3" />
+              <span>Self-destructs in {message.selfDestruct}s</span>
+            </div>
+          )}
+
+          {/* Voice message */}
+          {isVoiceMessage ? (
+            <div className="flex items-center gap-3 min-w-[200px]">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsPlaying(!isPlaying)}
+                className={cn(
+                  'p-2 rounded-full',
+                  isOwnMessage ? 'bg-primary-foreground/20' : 'bg-primary/20'
+                )}
+              >
+                {isPlaying ? (
+                  <Pause className="w-4 h-4" />
+                ) : (
+                  <Play className="w-4 h-4" />
+                )}
+              </motion.button>
+              <div className="flex-1 flex items-center gap-1 h-6">
+                {[...Array(20)].map((_, i) => (
+                  <div
+                    key={i}
+                    className={cn(
+                      'w-1 rounded-full',
+                      isOwnMessage ? 'bg-primary-foreground/40' : 'bg-primary/40'
+                    )}
+                    style={{ height: `${Math.random() * 100}%`, minHeight: 4 }}
+                  />
+                ))}
+              </div>
+              <span className="text-xs opacity-70">
+                {message.content.match(/\d+:\d+/)?.[0] || '0:00'}
+              </span>
+            </div>
+          ) : hasMarkdown ? (
+            <div className="text-[15px] leading-relaxed">
+              <MarkdownRenderer content={message.content} />
+            </div>
+          ) : (
+            <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">
+              {message.content}
+            </p>
+          )}
+
+          {/* Bookmark indicator */}
+          {message.isBookmarked && (
+            <Bookmark className="absolute -top-1 -right-1 w-4 h-4 text-primary fill-primary" />
+          )}
         </div>
 
         {/* Reactions */}
@@ -55,6 +151,7 @@ export function MessageBubble({ message, isOwnMessage, showAvatar = true }: Mess
                 key={index}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                onClick={() => onReact?.(message.id, reaction.emoji)}
                 className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-2 text-xs hover:bg-surface-3 transition-colors"
               >
                 <span>{reaction.emoji}</span>
@@ -78,6 +175,62 @@ export function MessageBubble({ message, isOwnMessage, showAvatar = true }: Mess
           )}
         </div>
       </div>
+
+      {/* Action buttons */}
+      <AnimatePresence>
+        {showActions && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className={cn(
+              'absolute top-0 flex items-center gap-0.5 p-1 bg-card rounded-lg border border-border shadow-lg',
+              isOwnMessage ? 'right-full mr-2' : 'left-full ml-2'
+            )}
+          >
+            <div className="relative">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-surface-2 transition-colors"
+                title="React"
+              >
+                <Smile className="w-4 h-4" />
+              </motion.button>
+              <EmojiPicker
+                isOpen={showEmojiPicker}
+                onClose={() => setShowEmojiPicker(false)}
+                onSelect={(emoji) => onReact?.(message.id, emoji)}
+                position="bottom"
+              />
+            </div>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => onReply?.(message)}
+              className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-surface-2 transition-colors"
+              title="Reply"
+            >
+              <Reply className="w-4 h-4" />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => onBookmark?.(message.id)}
+              className={cn(
+                'p-1.5 rounded-md transition-colors',
+                message.isBookmarked 
+                  ? 'text-primary' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-surface-2'
+              )}
+              title="Bookmark"
+            >
+              <Bookmark className={cn('w-4 h-4', message.isBookmarked && 'fill-primary')} />
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
