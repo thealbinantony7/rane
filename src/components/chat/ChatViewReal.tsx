@@ -234,7 +234,21 @@ export function ChatViewReal({ conversation, onToggleInfo, onCall, profiles }: C
       {/* Modals */}
       <MediaUpload isOpen={showMediaUpload} onClose={() => setShowMediaUpload(false)} onUpload={(files) => handleSendMessage(`[Attached ${files.length} file(s)]`)} />
       <SelfDestructTimer isOpen={showTimerSettings} onClose={() => setShowTimerSettings(false)} onSelect={setSelfDestructTimer} currentTimer={selfDestructTimer} />
-      <AISummary isOpen={showAISummary} onClose={() => setShowAISummary(false)} conversationName={getConversationName()} />
+      <AISummary 
+        isOpen={showAISummary} 
+        onClose={() => setShowAISummary(false)} 
+        conversationName={getConversationName()}
+        messages={messages.map(m => {
+          const sender = m.sender || profiles.find(p => p.id === m.sender_id);
+          return {
+            id: m.id,
+            content: m.content,
+            sender_id: m.sender_id,
+            sender_name: sender?.display_name || sender?.username || 'User',
+            created_at: m.created_at,
+          };
+        })}
+      />
     </div>
   );
 }
