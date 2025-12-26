@@ -106,40 +106,53 @@ export default function Auth() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="w-full max-w-md"
       >
         {/* Logo */}
-        <div className="text-center mb-8 flex flex-col items-center">
+        <div className="text-center mb-10 flex flex-col items-center">
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            initial={{ scale: 0, rotate: -10 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.1 }}
           >
             <RaneLogo size="lg" showText={false} />
           </motion.div>
-          <h1 className="text-3xl font-display font-bold text-gradient mt-4 mb-2">Rane</h1>
-          <p className="text-muted-foreground">
+          <motion.h1 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-3xl font-display font-semibold text-foreground mt-5 mb-1.5 tracking-tight"
+          >
+            Rane
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-muted-foreground text-base"
+          >
             {isLogin ? 'Welcome back' : 'Create your account'}
-          </p>
+          </motion.p>
         </div>
 
         {/* Form Card */}
-        <div className="bg-card border border-border rounded-2xl p-6 shadow-xl">
+        <div className="bg-card border border-border/50 rounded-3xl p-7 shadow-apple-lg vibrancy">
           {/* Tabs */}
-          <div className="flex mb-6 bg-surface-2 rounded-xl p-1">
-            {['Login', 'Sign Up'].map((tab, index) => (
+          <div className="flex mb-7 bg-surface-2 rounded-xl p-1">
+            {['Sign In', 'Sign Up'].map((tab, index) => (
               <motion.button
                 key={tab}
-                whileTap={{ scale: 0.98 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => {
                   setIsLogin(index === 0);
                   setError('');
                 }}
                 className={cn(
-                  'flex-1 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                  'flex-1 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
                   (index === 0 ? isLogin : !isLogin)
-                    ? 'bg-card text-foreground shadow-sm'
-                    : 'text-muted-foreground'
+                    ? 'bg-card text-foreground shadow-apple-sm'
+                    : 'text-muted-foreground hover:text-foreground/80'
                 )}
               >
                 {tab}

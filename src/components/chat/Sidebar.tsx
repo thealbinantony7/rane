@@ -90,9 +90,9 @@ export function Sidebar({
   };
 
   return (
-    <div className="w-80 h-full bg-card border-r border-border flex flex-col">
+    <div className="w-80 h-full bg-card/50 vibrancy border-r border-border/50 flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-border">
+      <div className="p-5 border-b border-border/50">
         <div className="flex items-center justify-between mb-4">
           <RaneLogo size="sm" />
           <div className="flex items-center gap-1">
@@ -100,7 +100,7 @@ export function Sidebar({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={onNewConversation}
-              className="p-2 rounded-lg hover:bg-surface-2 transition-colors"
+              className="p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect"
               title="New conversation"
             >
               <Plus className="w-5 h-5 text-muted-foreground" />
@@ -109,7 +109,7 @@ export function Sidebar({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={onOpenSettings}
-              className="p-2 rounded-lg hover:bg-surface-2 transition-colors"
+              className="p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect"
               title="Settings"
             >
               <Settings className="w-5 h-5 text-muted-foreground" />
@@ -122,28 +122,28 @@ export function Sidebar({
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
           onClick={onOpenCommandPalette}
-          className="w-full flex items-center gap-3 px-3 py-2.5 bg-surface-2 rounded-lg text-muted-foreground hover:bg-surface-3 transition-colors"
+          className="w-full flex items-center gap-3 px-4 py-3 bg-surface-2/80 rounded-xl text-muted-foreground hover:bg-surface-3/80 transition-all duration-200 border border-border/30"
         >
           <Search className="w-4 h-4" />
-          <span className="text-sm flex-1 text-left">Search messages...</span>
-          <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+          <span className="text-sm flex-1 text-left">Search</span>
+          <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded-md border border-border/50 bg-surface-3/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
             ⌘K
           </kbd>
         </motion.button>
 
         {/* Filters */}
-        <div className="flex items-center gap-1 mt-3 overflow-x-auto scrollbar-thin pb-1">
+        <div className="flex items-center gap-1.5 mt-4 overflow-x-auto scrollbar-thin pb-1">
           {filters.map(({ key, label }) => (
             <motion.button
               key={key}
               whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => setFilter(key)}
               className={cn(
-                'px-3 py-1.5 rounded-full text-xs font-medium transition-colors whitespace-nowrap',
+                'px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap',
                 filter === key
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-surface-2 text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-apple-sm'
+                  : 'bg-surface-2/60 text-muted-foreground hover:bg-surface-3/80 hover:text-foreground'
               )}
             >
               {label}
