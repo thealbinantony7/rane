@@ -28,12 +28,12 @@ export function ChatHeader({ conversation, onToggleInfo }: ChatHeaderProps) {
     <motion.header
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="h-16 px-4 border-b border-border flex items-center justify-between bg-card/50 backdrop-blur-xl"
+      className="h-16 px-5 border-b border-border/50 flex items-center justify-between bg-card/30 vibrancy"
     >
       <motion.button
-        whileHover={{ backgroundColor: 'hsl(var(--surface-2))' }}
+        whileHover={{ backgroundColor: 'hsl(var(--surface-2) / 0.8)' }}
         onClick={onToggleInfo}
-        className="flex items-center gap-3 py-2 px-3 -ml-3 rounded-lg transition-colors"
+        className="flex items-center gap-3 py-2 px-3 -ml-3 rounded-xl transition-all duration-200"
       >
         {/* Avatar */}
         <div className="relative">

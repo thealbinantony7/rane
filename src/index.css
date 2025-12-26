@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,70 +7,84 @@
 
 @layer base {
   :root {
-    --background: 160 20% 97%;
-    --foreground: 170 25% 8%;
-    --card: 160 20% 100%;
-    --card-foreground: 170 25% 8%;
-    --popover: 160 20% 100%;
-    --popover-foreground: 170 25% 8%;
-    --primary: 168 80% 42%;
+    /* Apple Light Mode */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 211 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 160 20% 94%;
-    --secondary-foreground: 170 25% 15%;
-    --muted: 160 15% 90%;
-    --muted-foreground: 170 10% 45%;
-    --accent: 200 85% 55%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 280 100% 60%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 160 15% 88%;
-    --input: 160 15% 88%;
-    --ring: 168 80% 42%;
-    --radius: 0.75rem;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 211 100% 50%;
+    --radius: 0.875rem;
 
-    /* Custom tokens */
-    --glass: 160 20% 100% / 0.8;
-    --glow: 168 80% 42% / 0.15;
-    --surface-1: 160 20% 98%;
-    --surface-2: 160 20% 95%;
-    --surface-3: 160 20% 92%;
-    --online: 142 76% 45%;
+    /* Custom Apple tokens */
+    --glass: 0 0% 100% / 0.72;
+    --glow: 211 100% 50% / 0.08;
+    --surface-1: 0 0% 98%;
+    --surface-2: 0 0% 96%;
+    --surface-3: 0 0% 93%;
+    --online: 142 71% 45%;
     --away: 38 92% 50%;
-    --message-own: 168 80% 42%;
-    --message-other: 160 20% 94%;
+    --message-own: 211 100% 50%;
+    --message-other: 0 0% 95%;
+    
+    /* Apple-style shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 24px 80px rgba(0, 0, 0, 0.16);
   }
 
   .dark {
-    --background: 170 30% 5%;
-    --foreground: 160 15% 95%;
-    --card: 170 28% 7%;
-    --card-foreground: 160 15% 95%;
-    --popover: 170 28% 9%;
-    --popover-foreground: 160 15% 95%;
-    --primary: 168 75% 48%;
+    /* Apple Dark Mode - True blacks */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 211 100% 55%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 170 25% 11%;
-    --secondary-foreground: 160 15% 90%;
-    --muted: 170 20% 14%;
-    --muted-foreground: 160 12% 55%;
-    --accent: 200 80% 58%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 280 100% 65%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 72% 50%;
+    --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 170 22% 13%;
-    --input: 170 22% 13%;
-    --ring: 168 75% 48%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 211 100% 55%;
 
-    /* Custom tokens */
-    --glass: 170 28% 8% / 0.9;
-    --glow: 168 75% 48% / 0.12;
-    --surface-1: 170 28% 8%;
-    --surface-2: 170 26% 10%;
-    --surface-3: 170 24% 13%;
-    --online: 142 76% 45%;
+    /* Custom Apple tokens - Dark */
+    --glass: 0 0% 8% / 0.88;
+    --glow: 211 100% 55% / 0.06;
+    --surface-1: 0 0% 7%;
+    --surface-2: 0 0% 11%;
+    --surface-3: 0 0% 15%;
+    --online: 142 71% 45%;
     --away: 38 92% 50%;
-    --message-own: 168 75% 45%;
-    --message-other: 170 26% 13%;
+    --message-own: 211 100% 50%;
+    --message-other: 0 0% 15%;
+    
+    /* Apple-style shadows - Dark */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 24px 80px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -80,9 +94,10 @@
   }
 
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
   }
 
   body {
@@ -92,20 +107,43 @@
 
 @layer utilities {
   .glass {
-    @apply bg-card/80 backdrop-blur-xl;
+    @apply backdrop-blur-2xl;
+    background: hsl(var(--glass));
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+  
+  .glass-subtle {
+    @apply backdrop-blur-xl;
+    background: hsl(var(--glass));
   }
   
   .glow {
-    box-shadow: 0 0 40px hsl(var(--glow));
+    box-shadow: 0 0 60px hsl(var(--glow)), 0 0 120px hsl(var(--glow));
   }
   
   .glow-sm {
-    box-shadow: 0 0 20px hsl(var(--glow));
+    box-shadow: 0 0 30px hsl(var(--glow));
+  }
+
+  .shadow-apple-sm {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .shadow-apple {
+    box-shadow: var(--shadow-md);
+  }
+
+  .shadow-apple-lg {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .shadow-apple-xl {
+    box-shadow: var(--shadow-xl);
   }
 
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted)) transparent;
+    scrollbar-color: hsl(var(--muted) / 0.5) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -117,15 +155,42 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted));
+    background-color: hsl(var(--muted) / 0.5);
     border-radius: 3px;
   }
 
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted) / 0.7);
+  }
+
   .text-gradient {
-    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+    background-size: 200% auto;
   }
 
   .font-display {
-    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  /* Apple-style button press effect */
+  .press-effect {
+    @apply transition-all duration-150 active:scale-[0.97] active:opacity-90;
+  }
+
+  /* Subtle hover lift */
+  .hover-lift {
+    @apply transition-all duration-300;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Apple vibrancy effect for overlays */
+  .vibrancy {
+    @apply backdrop-blur-3xl backdrop-saturate-150;
+    background: hsl(var(--glass));
   }
 }
