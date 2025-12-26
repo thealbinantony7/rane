@@ -28,7 +28,7 @@ export function ChatHeader({ conversation, onToggleInfo }: ChatHeaderProps) {
     <motion.header
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="h-16 px-5 border-b border-border/50 flex items-center justify-between bg-card/30 vibrancy"
+      className="h-16 px-5 border-b border-border/30 flex items-center justify-between liquid-glass"
     >
       <motion.button
         whileHover={{ backgroundColor: 'hsl(var(--surface-2) / 0.8)' }}

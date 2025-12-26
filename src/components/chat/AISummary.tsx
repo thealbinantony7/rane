@@ -83,7 +83,7 @@ export function AISummary({ isOpen, onClose, conversationName, messages = [] }: 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-card border border-border/50 rounded-3xl shadow-apple-xl z-50 overflow-hidden vibrancy"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg liquid-glass rounded-3xl shadow-glass-xl z-50 overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-border/50">

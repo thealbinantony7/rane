@@ -90,7 +90,7 @@ export function Sidebar({
   };
 
   return (
-    <div className="w-80 h-full bg-card/50 vibrancy border-r border-border/50 flex flex-col">
+    <div className="w-80 h-full liquid-glass border-r border-border/30 flex flex-col">
       {/* Header */}
       <div className="p-5 border-b border-border/50">
         <div className="flex items-center justify-between mb-4">
@@ -119,14 +119,14 @@ export function Sidebar({
 
         {/* Search */}
         <motion.button
-          whileHover={{ scale: 1.01 }}
+          whileHover={{ scale: 1.01, y: -1 }}
           whileTap={{ scale: 0.99 }}
           onClick={onOpenCommandPalette}
-          className="w-full flex items-center gap-3 px-4 py-3 bg-surface-2/80 rounded-xl text-muted-foreground hover:bg-surface-3/80 transition-all duration-200 border border-border/30"
+          className="w-full flex items-center gap-3 px-4 py-3 bg-surface-2/50 rounded-xl text-muted-foreground hover:bg-surface-2/80 transition-all duration-200 border border-border/20 shadow-glass hover-lift"
         >
           <Search className="w-4 h-4" />
           <span className="text-sm flex-1 text-left">Search</span>
-          <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded-md border border-border/50 bg-surface-3/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+          <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded-md border border-border/30 bg-surface-3/40 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
             ⌘K
           </kbd>
         </motion.button>
@@ -140,10 +140,10 @@ export function Sidebar({
               whileTap={{ scale: 0.97 }}
               onClick={() => setFilter(key)}
               className={cn(
-                'px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap',
+                'px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap press-effect',
                 filter === key
-                  ? 'bg-primary text-primary-foreground shadow-apple-sm'
-                  : 'bg-surface-2/60 text-muted-foreground hover:bg-surface-3/80 hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground glow-primary'
+                  : 'bg-surface-2/40 text-muted-foreground hover:bg-surface-2/80 hover:text-foreground border border-border/20'
               )}
             >
               {label}
@@ -254,28 +254,30 @@ function ConversationItemComponent({
 
   return (
     <motion.button
-      whileHover={{ backgroundColor: 'hsl(var(--surface-2))' }}
+      whileHover={{ scale: 1.01, x: 2 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       className={cn(
-        'w-full flex items-center gap-3 p-3 rounded-lg transition-colors text-left',
-        isActive && 'bg-surface-2'
+        'w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left press-effect',
+        isActive 
+          ? 'bg-surface-2/80 border border-border/20 shadow-glass' 
+          : 'hover:bg-surface-2/50'
       )}
     >
       {/* Avatar */}
       <div className="relative flex-shrink-0">
         {conversation.type === 'channel' ? (
-          <div className="w-12 h-12 rounded-full bg-surface-3 flex items-center justify-center text-muted-foreground font-semibold">
+          <div className="w-12 h-12 rounded-2xl bg-surface-3/80 flex items-center justify-center text-muted-foreground font-semibold border border-border/20">
             #
           </div>
         ) : conversation.type === 'group' ? (
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-primary/10">
             <span className="text-primary font-semibold">{name.charAt(0)}</span>
           </div>
         ) : avatar ? (
-          <img src={avatar} alt={name} className="w-12 h-12 rounded-full object-cover" />
+          <img src={avatar} alt={name} className="w-12 h-12 rounded-2xl object-cover ring-1 ring-border/20" />
         ) : (
-          <div className="w-12 h-12 rounded-full bg-surface-3 flex items-center justify-center text-muted-foreground font-semibold">
+          <div className="w-12 h-12 rounded-2xl bg-surface-3/80 flex items-center justify-center text-muted-foreground font-semibold border border-border/20">
             {name.charAt(0)}
           </div>
         )}
@@ -320,7 +322,7 @@ function ConversationItemComponent({
           </p>
           
           {(conversation.unread_count || 0) > 0 && (
-            <span className="flex-shrink-0 min-w-[20px] h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium flex items-center justify-center">
+            <span className="flex-shrink-0 min-w-[20px] h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium flex items-center justify-center glow-primary pulse-glow">
               {conversation.unread_count}
             </span>
           )}

@@ -102,12 +102,16 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background gradient orbs */}
+      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-50" />
+      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-50" />
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="w-full max-w-md"
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-md relative z-10"
       >
         {/* Logo */}
         <div className="text-center mb-10 flex flex-col items-center">
@@ -115,21 +119,22 @@ export default function Auth() {
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.1 }}
+            className="float"
           >
-            <RaneLogo size="lg" showText={false} />
+            <RaneLogo size="lg" showText={false} animated />
           </motion.div>
           <motion.h1 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-3xl font-display font-semibold text-foreground mt-5 mb-1.5 tracking-tight"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.5 }}
+            className="text-3xl font-display text-foreground mt-6 mb-1.5"
           >
             Rane
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.35 }}
             className="text-muted-foreground text-base"
           >
             {isLogin ? 'Welcome back' : 'Create your account'}
@@ -137,9 +142,14 @@ export default function Auth() {
         </div>
 
         {/* Form Card */}
-        <div className="bg-card border border-border/50 rounded-3xl p-7 shadow-apple-lg vibrancy">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="liquid-glass rounded-3xl p-7 shadow-glass-xl"
+        >
           {/* Tabs */}
-          <div className="flex mb-7 bg-surface-2 rounded-xl p-1">
+          <div className="flex mb-7 bg-surface-2/50 rounded-xl p-1 border border-border/20">
             {['Sign In', 'Sign Up'].map((tab, index) => (
               <motion.button
                 key={tab}
@@ -292,15 +302,20 @@ export default function Auth() {
               GitHub
             </motion.button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-muted-foreground mt-6">
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-center text-sm text-muted-foreground mt-6"
+        >
           By continuing, you agree to Rane's{' '}
           <a href="#" className="text-primary hover:underline">Terms of Service</a>
           {' '}and{' '}
           <a href="#" className="text-primary hover:underline">Privacy Policy</a>
-        </p>
+        </motion.p>
       </motion.div>
     </div>
   );
