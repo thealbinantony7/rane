@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { MessageCircle, Mail, Lock, User, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { z } from 'zod';
+import { RaneLogo } from '@/components/RaneLogo';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -108,16 +109,15 @@ export default function Auth() {
         className="w-full max-w-md"
       >
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 flex flex-col items-center">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center"
           >
-            <MessageCircle className="w-8 h-8 text-primary-foreground" />
+            <RaneLogo size="lg" showText={false} />
           </motion.div>
-          <h1 className="text-3xl font-bold text-gradient mb-2">Rane</h1>
+          <h1 className="text-3xl font-display font-bold text-gradient mt-4 mb-2">Rane</h1>
           <p className="text-muted-foreground">
             {isLogin ? 'Welcome back' : 'Create your account'}
           </p>

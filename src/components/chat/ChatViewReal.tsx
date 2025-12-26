@@ -13,6 +13,7 @@ import { SelfDestructTimer } from './SelfDestructTimer';
 import { AISummary } from './AISummary';
 import { InChatSearch } from './InChatSearch';
 import { MessageCircle, Sparkles } from 'lucide-react';
+import { RaneLogo } from '@/components/RaneLogo';
 
 interface ChatViewRealProps {
   conversation: Conversation | null;
@@ -88,13 +89,13 @@ export function ChatViewReal({ conversation, onToggleInfo, onCall, profiles }: C
       <div className="flex-1 flex items-center justify-center bg-background">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
           <motion.div
-            animate={{ scale: [1, 1.05, 1], rotate: [0, 5, -5, 0] }}
+            animate={{ scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] }}
             transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse' }}
-            className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center"
+            className="mb-6 flex justify-center"
           >
-            <MessageCircle className="w-10 h-10 text-primary" />
+            <RaneLogo size="xl" showText={false} />
           </motion.div>
-          <h2 className="text-2xl font-semibold text-foreground mb-2">Welcome to Rane</h2>
+          <h2 className="text-2xl font-display font-semibold text-foreground mb-2">Welcome to Rane</h2>
           <p className="text-muted-foreground max-w-sm">Select a conversation to start messaging.</p>
           <p className="text-sm text-muted-foreground/60 mt-4">
             Press <kbd className="px-2 py-1 rounded bg-surface-2 font-mono text-xs">⌘K</kbd> to search
