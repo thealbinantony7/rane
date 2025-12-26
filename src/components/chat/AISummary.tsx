@@ -1,14 +1,25 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, X, Loader2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+
+interface Message {
+  id: string;
+  content: string;
+  sender_id: string;
+  sender_name?: string;
+  created_at: string;
+}
 
 interface AISummaryProps {
   isOpen: boolean;
   onClose: () => void;
   conversationName: string;
+  messages?: Message[];
 }
 
-export function AISummary({ isOpen, onClose, conversationName }: AISummaryProps) {
+export function AISummary({ isOpen, onClose, conversationName, messages = [] }: AISummaryProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [summary, setSummary] = useState('');
 
@@ -17,25 +28,41 @@ export function AISummary({ isOpen, onClose, conversationName }: AISummaryProps)
       setIsLoading(true);
       setSummary('');
       
-      // Simulate AI generating summary
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-        setSummary(
-          `**Key Discussion Points:**\n\n` +
-          `• The team discussed the new UI design direction, focusing on minimalist aesthetics\n` +
-          `• Alex shared the latest mockups which received positive feedback\n` +
-          `• Decision made to prioritize the mobile-responsive layout\n` +
-          `• Next milestone: Complete the design review by end of week\n\n` +
-          `**Action Items:**\n` +
-          `1. Review the Figma designs\n` +
-          `2. Share feedback by tomorrow\n` +
-          `3. Schedule follow-up meeting`
-        );
-      }, 2000);
+      const generateSummary = async () => {
+        try {
+          const { data, error } = await supabase.functions.invoke('ai-summary', {
+            body: { 
+              messages: messages.map(m => ({
+                sender_name: m.sender_name || 'User',
+                content: m.content,
+                created_at: m.created_at
+              })),
+              conversationName 
+            }
+          });
 
-      return () => clearTimeout(timer);
+          if (error) {
+            throw error;
+          }
+
+          if (data?.error) {
+            toast.error(data.error);
+            setSummary('Unable to generate summary. Please try again later.');
+          } else {
+            setSummary(data?.summary || 'No summary available.');
+          }
+        } catch (error) {
+          console.error('Error generating summary:', error);
+          toast.error('Failed to generate AI summary');
+          setSummary('Unable to generate summary. Please try again later.');
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      generateSummary();
     }
-  }, [isOpen]);
+  }, [isOpen, messages, conversationName]);
 
   return (
     <AnimatePresence>
