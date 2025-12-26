@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Edit, Settings, Filter, Plus } from 'lucide-react';
+import { Search, Settings, Filter, Plus } from 'lucide-react';
 import { Conversation } from '@/hooks/useDatabase';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { RaneLogo } from '@/components/RaneLogo';
 
 interface SidebarProps {
   conversations: Conversation[];
@@ -93,7 +94,7 @@ export function Sidebar({
       {/* Header */}
       <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-semibold text-gradient">Messages</h1>
+          <RaneLogo size="sm" />
           <div className="flex items-center gap-1">
             <motion.button
               whileHover={{ scale: 1.05 }}

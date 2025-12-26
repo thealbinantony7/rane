@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,70 +7,70 @@
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 220 20% 10%;
-    --card: 220 20% 100%;
-    --card-foreground: 220 20% 10%;
-    --popover: 220 20% 100%;
-    --popover-foreground: 220 20% 10%;
-    --primary: 217 91% 60%;
+    --background: 160 20% 97%;
+    --foreground: 170 25% 8%;
+    --card: 160 20% 100%;
+    --card-foreground: 170 25% 8%;
+    --popover: 160 20% 100%;
+    --popover-foreground: 170 25% 8%;
+    --primary: 168 80% 42%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 20% 94%;
-    --secondary-foreground: 220 20% 20%;
-    --muted: 220 15% 90%;
-    --muted-foreground: 220 10% 45%;
-    --accent: 262 83% 58%;
+    --secondary: 160 20% 94%;
+    --secondary-foreground: 170 25% 15%;
+    --muted: 160 15% 90%;
+    --muted-foreground: 170 10% 45%;
+    --accent: 200 85% 55%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 88%;
-    --input: 220 15% 88%;
-    --ring: 217 91% 60%;
+    --border: 160 15% 88%;
+    --input: 160 15% 88%;
+    --ring: 168 80% 42%;
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --glass: 220 20% 100% / 0.8;
-    --glow: 217 91% 60% / 0.15;
-    --surface-1: 220 20% 98%;
-    --surface-2: 220 20% 95%;
-    --surface-3: 220 20% 92%;
+    --glass: 160 20% 100% / 0.8;
+    --glow: 168 80% 42% / 0.15;
+    --surface-1: 160 20% 98%;
+    --surface-2: 160 20% 95%;
+    --surface-3: 160 20% 92%;
     --online: 142 76% 45%;
     --away: 38 92% 50%;
-    --message-own: 217 91% 60%;
-    --message-other: 220 20% 94%;
+    --message-own: 168 80% 42%;
+    --message-other: 160 20% 94%;
   }
 
   .dark {
-    --background: 220 25% 6%;
-    --foreground: 220 10% 95%;
-    --card: 220 25% 8%;
-    --card-foreground: 220 10% 95%;
-    --popover: 220 25% 10%;
-    --popover-foreground: 220 10% 95%;
-    --primary: 217 91% 60%;
+    --background: 170 30% 5%;
+    --foreground: 160 15% 95%;
+    --card: 170 28% 7%;
+    --card-foreground: 160 15% 95%;
+    --popover: 170 28% 9%;
+    --popover-foreground: 160 15% 95%;
+    --primary: 168 75% 48%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 25% 12%;
-    --secondary-foreground: 220 10% 90%;
-    --muted: 220 20% 15%;
-    --muted-foreground: 220 10% 55%;
-    --accent: 262 83% 65%;
+    --secondary: 170 25% 11%;
+    --secondary-foreground: 160 15% 90%;
+    --muted: 170 20% 14%;
+    --muted-foreground: 160 12% 55%;
+    --accent: 200 80% 58%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 20% 14%;
-    --input: 220 20% 14%;
-    --ring: 217 91% 60%;
+    --border: 170 22% 13%;
+    --input: 170 22% 13%;
+    --ring: 168 75% 48%;
 
     /* Custom tokens */
-    --glass: 220 25% 10% / 0.85;
-    --glow: 217 91% 60% / 0.1;
-    --surface-1: 220 25% 9%;
-    --surface-2: 220 25% 11%;
-    --surface-3: 220 25% 14%;
+    --glass: 170 28% 8% / 0.9;
+    --glow: 168 75% 48% / 0.12;
+    --surface-1: 170 28% 8%;
+    --surface-2: 170 26% 10%;
+    --surface-3: 170 24% 13%;
     --online: 142 76% 45%;
     --away: 38 92% 50%;
-    --message-own: 217 91% 55%;
-    --message-other: 220 25% 14%;
+    --message-own: 168 75% 45%;
+    --message-other: 170 26% 13%;
   }
 }
 
@@ -122,5 +123,9 @@
 
   .text-gradient {
     @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+
+  .font-display {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   }
 }
