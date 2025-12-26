@@ -248,7 +248,7 @@ export function CommandPalette({ isOpen, onClose, onSelectConversation }: Comman
                   Select
                 </span>
               </div>
-              <span className="text-primary font-medium">Nova</span>
+              <span className="text-primary font-medium">Rane</span>
             </div>
           </motion.div>
         </>

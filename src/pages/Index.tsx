@@ -94,7 +94,7 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Nova - Next Generation Messaging</title>
+        <title>Rane - Next Generation Messaging</title>
         <meta name="description" content="A premium, real-time messaging platform with end-to-end encryption, beautiful design, and powerful features." />
       </Helmet>
 

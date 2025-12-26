@@ -117,7 +117,7 @@ export default function Auth() {
           >
             <MessageCircle className="w-8 h-8 text-primary-foreground" />
           </motion.div>
-          <h1 className="text-3xl font-bold text-gradient mb-2">Nova</h1>
+          <h1 className="text-3xl font-bold text-gradient mb-2">Rane</h1>
           <p className="text-muted-foreground">
             {isLogin ? 'Welcome back' : 'Create your account'}
           </p>
@@ -283,7 +283,7 @@ export default function Auth() {
 
         {/* Footer */}
         <p className="text-center text-sm text-muted-foreground mt-6">
-          By continuing, you agree to Nova's{' '}
+          By continuing, you agree to Rane's{' '}
           <a href="#" className="text-primary hover:underline">Terms of Service</a>
           {' '}and{' '}
           <a href="#" className="text-primary hover:underline">Privacy Policy</a>
