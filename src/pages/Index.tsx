@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Sidebar } from '@/components/chat/Sidebar';
 import { ChatViewReal } from '@/components/chat/ChatViewReal';
@@ -9,12 +9,39 @@ import { NewConversationModal } from '@/components/chat/NewConversationModal';
 import { CallModal } from '@/components/chat/CallModal';
 import { useConversations, useProfiles, Conversation } from '@/hooks/useDatabase';
 import { useAuth } from '@/hooks/useAuth';
+import { useDemoMode, DemoConversation } from '@/hooks/useDemoMode';
 import { Helmet } from 'react-helmet';
 
 const Index = () => {
   const { user } = useAuth();
-  const { conversations, loading: conversationsLoading, refetch, createConversation } = useConversations();
+  const { conversations: dbConversations, loading: conversationsLoading, refetch, createConversation } = useConversations();
   const { profiles } = useProfiles();
+  const { demoConversations, getDemoMessages, sendDemoMessage, getDemoUser, currentUser } = useDemoMode();
+  
+  // Use demo mode if no real conversations and not loading
+  const isDemoMode = !conversationsLoading && dbConversations.length === 0;
+  
+  // Convert demo conversations to the Conversation type for compatibility
+  const conversations: Conversation[] = useMemo(() => {
+    if (isDemoMode) {
+      return demoConversations.map(dc => ({
+        id: dc.id,
+        type: dc.type,
+        name: dc.name,
+        avatar_url: dc.avatar_url,
+        is_pinned: dc.is_pinned,
+        is_muted: dc.is_muted,
+        is_private: false,
+        unread_count: dc.unread_count,
+        last_message: dc.last_message,
+        members: dc.members,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })) as unknown as Conversation[];
+    }
+    return dbConversations;
+  }, [isDemoMode, demoConversations, dbConversations]);
+
   const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
   const [showInfo, setShowInfo] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
@@ -116,6 +143,10 @@ const Index = () => {
           onToggleInfo={() => setShowInfo(!showInfo)}
           onCall={handleCall}
           profiles={profiles}
+          isDemoMode={isDemoMode}
+          getDemoMessages={getDemoMessages}
+          sendDemoMessage={sendDemoMessage}
+          getDemoUser={getDemoUser}
         />
 
         {/* Info Panel */}
