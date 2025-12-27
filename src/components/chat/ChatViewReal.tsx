@@ -14,18 +14,50 @@ import { AISummary } from './AISummary';
 import { InChatSearch } from './InChatSearch';
 import { MessageCircle, Sparkles } from 'lucide-react';
 import { RaneLogo } from '@/components/RaneLogo';
+import { DemoMessage } from '@/hooks/useDemoMode';
+import { User } from '@/lib/mockData';
 
 interface ChatViewRealProps {
   conversation: Conversation | null;
   onToggleInfo: () => void;
   onCall: (type: 'voice' | 'video') => void;
   profiles: Profile[];
+  isDemoMode?: boolean;
+  getDemoMessages?: (conversationId: string) => DemoMessage[];
+  sendDemoMessage?: (conversationId: string, content: string) => DemoMessage;
+  getDemoUser?: (userId: string) => User | undefined;
 }
 
-export function ChatViewReal({ conversation, onToggleInfo, onCall, profiles }: ChatViewRealProps) {
+export function ChatViewReal({ 
+  conversation, 
+  onToggleInfo, 
+  onCall, 
+  profiles,
+  isDemoMode = false,
+  getDemoMessages,
+  sendDemoMessage: sendDemoMsg,
+  getDemoUser,
+}: ChatViewRealProps) {
   const { user } = useAuth();
-  const { messages, loading, sendMessage, addReaction, toggleBookmark } = useMessages(conversation?.id || null);
-  const [replyingTo, setReplyingTo] = useState<Message | null>(null);
+  const { messages: dbMessages, loading: dbLoading, sendMessage: dbSendMessage, addReaction, toggleBookmark } = useMessages(conversation?.id || null);
+  
+  // Use demo messages if in demo mode
+  const demoMessages = isDemoMode && getDemoMessages && conversation ? getDemoMessages(conversation.id) : [];
+  const messages = isDemoMode ? demoMessages.map(dm => ({
+    id: dm.id,
+    content: dm.content,
+    sender_id: dm.sender_id,
+    created_at: dm.created_at,
+    is_read: dm.is_read,
+    is_bookmarked: false,
+    self_destruct_seconds: null,
+    reactions: dm.reactions?.map(r => ({ emoji: r.emoji, user_id: 'me' })) || [],
+    sender: getDemoUser ? getDemoUser(dm.sender_id) : undefined,
+  })) : dbMessages;
+  
+  const loading = isDemoMode ? false : dbLoading;
+  
+  const [replyingTo, setReplyingTo] = useState<any>(null);
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
   const [showMediaUpload, setShowMediaUpload] = useState(false);
   const [showTimerSettings, setShowTimerSettings] = useState(false);
@@ -44,8 +76,13 @@ export function ChatViewReal({ conversation, onToggleInfo, onCall, profiles }: C
   }, [conversation?.id]);
 
   const handleSendMessage = async (content: string, options?: { selfDestruct?: number }) => {
+    if (isDemoMode && sendDemoMsg && conversation) {
+      sendDemoMsg(conversation.id, content);
+      setReplyingTo(null);
+      return;
+    }
     try {
-      await sendMessage(content, { 
+      await dbSendMessage(content, { 
         replyTo: replyingTo?.id, 
         selfDestruct: options?.selfDestruct || selfDestructTimer || undefined 
       });
@@ -56,11 +93,15 @@ export function ChatViewReal({ conversation, onToggleInfo, onCall, profiles }: C
   };
 
   const handleReact = (messageId: string, emoji: string) => {
-    addReaction(messageId, emoji);
+    if (!isDemoMode) {
+      addReaction(messageId, emoji);
+    }
   };
 
   const handleBookmark = (messageId: string) => {
-    toggleBookmark(messageId);
+    if (!isDemoMode) {
+      toggleBookmark(messageId);
+    }
   };
 
   const handleVoiceSend = (duration: number) => {
@@ -161,13 +202,13 @@ export function ChatViewReal({ conversation, onToggleInfo, onCall, profiles }: C
           </div>
         ) : (
           <AnimatePresence mode="popLayout">
-            {messages.map((message, index) => {
-              const isOwnMessage = message.sender_id === user?.id;
+            {messages.map((message: any, index: number) => {
+              const isOwnMessage = isDemoMode ? message.sender_id === 'me' : message.sender_id === user?.id;
               const prevMessage = messages[index - 1];
-              const showAvatar = !prevMessage || prevMessage.sender_id !== message.sender_id;
-              const replyToMessage = message.reply_to ? messages.find(m => m.id === message.reply_to) : undefined;
+              const showAvatar = !prevMessage || (prevMessage as any).sender_id !== message.sender_id;
+              const replyToMessage = message.reply_to ? messages.find((m: any) => m.id === message.reply_to) : undefined;
 
-              const sender = message.sender || profiles.find(p => p.id === message.sender_id);
+              const sender = message.sender || profiles.find(p => p.id === message.sender_id) || (isDemoMode && getDemoUser ? getDemoUser(message.sender_id) : undefined);
 
               return (
                 <div key={message.id} id={`message-${message.id}`}>
