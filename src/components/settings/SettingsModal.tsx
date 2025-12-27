@@ -312,7 +312,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[85vh] bg-card border border-border rounded-2xl shadow-2xl z-50 overflow-hidden flex"
+            className="fixed inset-0 m-auto w-full max-w-2xl h-fit max-h-[85vh] bg-card border border-border rounded-2xl shadow-2xl z-50 overflow-hidden flex"
           >
             {/* Sidebar */}
             <div className="w-56 bg-surface-1 border-r border-border p-4 flex flex-col">
