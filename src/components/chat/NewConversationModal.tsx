@@ -66,20 +66,20 @@ export function NewConversationModal({ isOpen, onClose, onCreate }: NewConversat
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50"
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
           />
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 m-auto w-full max-w-md h-fit bg-card border border-border rounded-2xl shadow-2xl z-50 overflow-hidden"
+            className="relative w-full max-w-md bg-card border border-border rounded-2xl shadow-2xl overflow-hidden mx-4"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
@@ -278,7 +278,7 @@ export function NewConversationModal({ isOpen, onClose, onCreate }: NewConversat
               </motion.button>
             </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );
