@@ -93,11 +93,11 @@ export function MessageInput({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-4 border-t border-border/30 liquid-glass relative"
+      className="p-2 md:p-4 border-t border-border/30 liquid-glass relative"
     >
       {/* Self-destruct indicator */}
       {selfDestructTimer && (
-        <div className="flex items-center gap-2 px-4 py-2.5 mb-3 bg-destructive/10 rounded-xl text-sm text-destructive border border-destructive/20">
+        <div className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-2.5 mb-2 md:mb-3 bg-destructive/10 rounded-xl text-xs md:text-sm text-destructive border border-destructive/20">
           <Timer className="w-4 h-4" />
           <span>Messages will self-destruct after {selfDestructTimer}s</span>
         </div>
@@ -105,7 +105,7 @@ export function MessageInput({
 
       <div
         className={cn(
-          'flex items-end gap-2 p-2.5 rounded-2xl bg-surface-2/60 border border-border/20 transition-all duration-300',
+          'flex items-end gap-1 md:gap-2 p-1.5 md:p-2.5 rounded-2xl bg-surface-2/60 border border-border/20 transition-all duration-300',
           isFocused && 'border-primary/30 shadow-glass bg-surface-2/80'
         )}
       >
@@ -116,10 +116,10 @@ export function MessageInput({
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
+              className="p-1.5 md:p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
               title="Emoji"
             >
-              <Smile className="w-5 h-5" />
+              <Smile className="w-4 h-4 md:w-5 md:h-5" />
             </motion.button>
             <EmojiPicker
               isOpen={showEmojiPicker}
@@ -133,7 +133,7 @@ export function MessageInput({
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => insertMarkdown('code')}
-            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
+            className="p-1.5 md:p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors hidden md:block"
             title="Code block"
           >
             <Code className="w-5 h-5" />
@@ -143,10 +143,10 @@ export function MessageInput({
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={onOpenMediaUpload}
-            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
+            className="p-1.5 md:p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
             title="Attach files"
           >
-            <Paperclip className="w-5 h-5" />
+            <Paperclip className="w-4 h-4 md:w-5 md:h-5" />
           </motion.button>
 
           <motion.button
@@ -154,7 +154,7 @@ export function MessageInput({
             whileTap={{ scale: 0.9 }}
             onClick={onOpenTimerSettings}
             className={cn(
-              'p-2 rounded-lg transition-colors',
+              'p-1.5 md:p-2 rounded-lg transition-colors hidden md:block',
               selfDestructTimer 
                 ? 'text-destructive bg-destructive/10' 
                 : 'text-muted-foreground hover:text-foreground hover:bg-surface-3'
@@ -173,9 +173,9 @@ export function MessageInput({
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder="Type a message... (supports **markdown** and `code`)"
+          placeholder="Type a message..."
           rows={1}
-          className="flex-1 bg-transparent border-none outline-none resize-none text-foreground placeholder:text-muted-foreground py-2 px-2 max-h-[150px] text-[15px] leading-relaxed"
+          className="flex-1 bg-transparent border-none outline-none resize-none text-foreground placeholder:text-muted-foreground py-2 px-1 md:px-2 max-h-[150px] text-sm md:text-[15px] leading-relaxed"
         />
 
         {/* Send / Voice Button */}
@@ -187,26 +187,26 @@ export function MessageInput({
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleSend}
-              className="p-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              className="p-2 md:p-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-4 h-4 md:w-5 md:h-5" />
             </motion.button>
           ) : (
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={onStartVoiceRecording}
-              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
+              className="p-1.5 md:p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-3 transition-colors"
               title="Voice message"
             >
-              <Mic className="w-5 h-5" />
+              <Mic className="w-4 h-4 md:w-5 md:h-5" />
             </motion.button>
           )}
         </div>
       </div>
 
-      {/* Hint */}
-      <p className="text-xs text-muted-foreground/60 mt-2 text-center">
+      {/* Hint - hidden on mobile */}
+      <p className="hidden md:block text-xs text-muted-foreground/60 mt-2 text-center">
         Press <kbd className="px-1.5 py-0.5 rounded bg-surface-3 font-mono text-[10px]">Enter</kbd> to send • 
         Use <kbd className="px-1.5 py-0.5 rounded bg-surface-3 font-mono text-[10px]">**bold**</kbd> and <kbd className="px-1.5 py-0.5 rounded bg-surface-3 font-mono text-[10px]">`code`</kbd> for formatting
       </p>

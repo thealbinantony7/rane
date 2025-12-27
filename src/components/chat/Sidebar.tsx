@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Search, Settings, Filter, Plus } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, Settings, Filter, Plus, X, Menu } from 'lucide-react';
 import { Conversation } from '@/hooks/useDatabase';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
@@ -14,6 +14,8 @@ interface SidebarProps {
   onOpenSettings: () => void;
   onNewConversation: () => void;
   loading: boolean;
+  isMobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
 type FilterType = 'all' | 'unread' | 'groups' | 'channels';
@@ -26,6 +28,8 @@ export function Sidebar({
   onOpenSettings,
   onNewConversation,
   loading,
+  isMobileOpen = false,
+  onMobileClose,
 }: SidebarProps) {
   const [filter, setFilter] = useState<FilterType>('all');
   const { user } = useAuth();
@@ -89,33 +93,73 @@ export function Sidebar({
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
+  const handleSelectConversation = (conversation: Conversation) => {
+    onSelectConversation(conversation);
+    // Close mobile sidebar after selecting
+    onMobileClose?.();
+  };
+
   return (
-    <div className="w-80 h-full liquid-glass border-r border-border/30 flex flex-col">
-      {/* Header */}
-      <div className="p-5 border-b border-border/50">
-        <div className="flex items-center justify-between mb-4">
-          <RaneLogo size="sm" />
-          <div className="flex items-center gap-1">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={onNewConversation}
-              className="p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect"
-              title="New conversation"
-            >
-              <Plus className="w-5 h-5 text-muted-foreground" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={onOpenSettings}
-              className="p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect"
-              title="Settings"
-            >
-              <Settings className="w-5 h-5 text-muted-foreground" />
-            </motion.button>
+    <>
+      {/* Mobile overlay */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onMobileClose}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+          />
+        )}
+      </AnimatePresence>
+
+      <motion.div 
+        className={cn(
+          "h-full liquid-glass border-r border-border/30 flex flex-col z-50",
+          // Desktop: always visible
+          "hidden md:flex md:w-80",
+          // Mobile: slide in from left
+          isMobileOpen && "fixed inset-y-0 left-0 flex w-[85vw] max-w-[320px] md:relative md:w-80"
+        )}
+        initial={false}
+        animate={isMobileOpen ? { x: 0 } : undefined}
+      >
+        {/* Header */}
+        <div className="p-4 md:p-5 border-b border-border/50">
+          <div className="flex items-center justify-between mb-4">
+            <RaneLogo size="sm" />
+            <div className="flex items-center gap-1">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onNewConversation}
+                className="p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect"
+                title="New conversation"
+              >
+                <Plus className="w-5 h-5 text-muted-foreground" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onOpenSettings}
+                className="p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect"
+                title="Settings"
+              >
+                <Settings className="w-5 h-5 text-muted-foreground" />
+              </motion.button>
+              {/* Mobile close button */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onMobileClose}
+                className="p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect md:hidden"
+                title="Close"
+              >
+                <X className="w-5 h-5 text-muted-foreground" />
+              </motion.button>
+            </div>
           </div>
-        </div>
 
         {/* Search */}
         <motion.button
@@ -165,12 +209,12 @@ export function Sidebar({
                 <p className="text-xs font-medium text-muted-foreground px-3 mb-2 uppercase tracking-wider">
                   Pinned
                 </p>
-                {pinnedConversations.map((conv) => (
+              {pinnedConversations.map((conv) => (
                   <ConversationItemComponent
                     key={conv.id}
                     conversation={conv}
                     isActive={activeConversation?.id === conv.id}
-                    onClick={() => onSelectConversation(conv)}
+                    onClick={() => handleSelectConversation(conv)}
                     name={getConversationName(conv)}
                     avatar={getConversationAvatar(conv)}
                     status={getOtherMemberStatus(conv)}
@@ -193,7 +237,7 @@ export function Sidebar({
                     key={conv.id}
                     conversation={conv}
                     isActive={activeConversation?.id === conv.id}
-                    onClick={() => onSelectConversation(conv)}
+                    onClick={() => handleSelectConversation(conv)}
                     name={getConversationName(conv)}
                     avatar={getConversationAvatar(conv)}
                     status={getOtherMemberStatus(conv)}
@@ -225,7 +269,8 @@ export function Sidebar({
           </>
         )}
       </div>
-    </div>
+      </motion.div>
+    </>
   );
 }
 
