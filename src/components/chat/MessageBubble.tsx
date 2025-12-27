@@ -42,7 +42,7 @@ export function MessageBubble({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       className={cn(
-        'flex gap-2 max-w-[75%] group relative',
+        'flex gap-1.5 md:gap-2 max-w-[85%] md:max-w-[75%] group relative',
         isOwnMessage ? 'ml-auto flex-row-reverse' : 'mr-auto'
       )}
       onMouseEnter={() => setShowActions(true)}
@@ -56,10 +56,10 @@ export function MessageBubble({
         <img
           src={sender?.avatar}
           alt={sender?.name}
-          className="w-8 h-8 rounded-full flex-shrink-0 mt-auto"
+          className="w-7 h-7 md:w-8 md:h-8 rounded-full flex-shrink-0 mt-auto"
         />
       )}
-      {!showAvatar && !isOwnMessage && <div className="w-8 flex-shrink-0" />}
+      {!showAvatar && !isOwnMessage && <div className="w-7 md:w-8 flex-shrink-0" />}
 
       <div className={cn('flex flex-col', isOwnMessage ? 'items-end' : 'items-start')}>
         {/* Reply reference */}
@@ -79,7 +79,7 @@ export function MessageBubble({
         {/* Message Content */}
         <div
           className={cn(
-            'px-4 py-2.5 rounded-2xl relative',
+            'px-3 py-2 md:px-4 md:py-2.5 rounded-2xl relative',
             isOwnMessage
               ? 'bg-message-own text-primary-foreground rounded-br-md'
               : 'bg-message-other text-card-foreground rounded-bl-md'
@@ -128,11 +128,11 @@ export function MessageBubble({
               </span>
             </div>
           ) : hasMarkdown ? (
-            <div className="text-[15px] leading-relaxed">
+            <div className="text-sm md:text-[15px] leading-relaxed">
               <MarkdownRenderer content={message.content} />
             </div>
           ) : (
-            <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">
+            <p className="text-sm md:text-[15px] leading-relaxed whitespace-pre-wrap break-words">
               {message.content}
             </p>
           )}
@@ -161,22 +161,22 @@ export function MessageBubble({
           </div>
         )}
 
-        {/* Timestamp & Read Status */}
-        <div className="flex items-center gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <span className="text-[11px] text-muted-foreground">
+        {/* Timestamp & Read Status - always visible on mobile */}
+        <div className="flex items-center gap-1 mt-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+          <span className="text-[10px] md:text-[11px] text-muted-foreground">
             {formatMessageTime(message.timestamp)}
           </span>
           {isOwnMessage && (
             message.isRead ? (
-              <CheckCheck className="w-3.5 h-3.5 text-primary" />
+              <CheckCheck className="w-3 h-3 md:w-3.5 md:h-3.5 text-primary" />
             ) : (
-              <Check className="w-3.5 h-3.5 text-muted-foreground" />
+              <Check className="w-3 h-3 md:w-3.5 md:h-3.5 text-muted-foreground" />
             )
           )}
         </div>
       </div>
 
-      {/* Action buttons */}
+      {/* Action buttons - only on desktop */}
       <AnimatePresence>
         {showActions && (
           <motion.div
@@ -184,7 +184,7 @@ export function MessageBubble({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             className={cn(
-              'absolute top-0 flex items-center gap-0.5 p-1 bg-card rounded-lg border border-border shadow-lg',
+              'absolute top-0 hidden md:flex items-center gap-0.5 p-1 bg-card rounded-lg border border-border shadow-lg',
               isOwnMessage ? 'right-full mr-2' : 'left-full ml-2'
             )}
           >

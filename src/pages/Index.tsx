@@ -48,6 +48,7 @@ const Index = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showNewConversation, setShowNewConversation] = useState(false);
   const [callData, setCallData] = useState<{ type: 'voice' | 'video'; participant: { name: string; avatar: string } } | null>(null);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   // Keyboard shortcut for command palette
   useEffect(() => {
@@ -79,6 +80,7 @@ const Index = () => {
 
   const handleSelectConversation = (conversation: Conversation) => {
     setActiveConversation(conversation);
+    setIsMobileSidebarOpen(false); // Close sidebar on mobile when selecting
   };
 
   const handleSelectConversationById = (conversationId: string) => {
@@ -135,6 +137,8 @@ const Index = () => {
           onOpenSettings={() => setShowSettings(true)}
           onNewConversation={() => setShowNewConversation(true)}
           loading={conversationsLoading}
+          isMobileOpen={isMobileSidebarOpen}
+          onMobileClose={() => setIsMobileSidebarOpen(false)}
         />
 
         {/* Main Chat View */}
@@ -147,6 +151,7 @@ const Index = () => {
           getDemoMessages={getDemoMessages}
           sendDemoMessage={sendDemoMessage}
           getDemoUser={getDemoUser}
+          onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
         />
 
         {/* Info Panel */}
