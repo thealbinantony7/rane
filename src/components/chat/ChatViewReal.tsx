@@ -135,12 +135,11 @@ export function ChatViewReal({
   if (!conversation) {
     return <div className="flex-1 flex flex-col items-center justify-center bg-background relative">
         {/* Mobile menu button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={onOpenMobileSidebar}
-          className="absolute top-4 left-4 p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect md:hidden"
-        >
+        <motion.button whileHover={{
+        scale: 1.05
+      }} whileTap={{
+        scale: 0.95
+      }} onClick={onOpenMobileSidebar} className="absolute top-4 left-4 p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect md:hidden">
           <Menu className="w-5 h-5 text-muted-foreground" />
         </motion.button>
         
@@ -166,12 +165,11 @@ export function ChatViewReal({
           <p className="text-xs md:text-sm text-muted-foreground/60 mt-4 hidden md:block">
             Press <kbd className="px-2 py-1 rounded bg-surface-2 font-mono text-xs">⌘K</kbd> to search
           </p>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={onOpenMobileSidebar}
-            className="mt-6 px-6 py-3 bg-primary text-primary-foreground rounded-xl text-sm font-medium md:hidden"
-          >
+          <motion.button whileHover={{
+          scale: 1.02
+        }} whileTap={{
+          scale: 0.98
+        }} onClick={onOpenMobileSidebar} className="mt-6 px-6 py-3 bg-primary text-primary-foreground rounded-xl text-sm font-medium md:hidden">
             View Conversations
           </motion.button>
         </motion.div>
@@ -205,7 +203,7 @@ export function ChatViewReal({
       y: -1
     }} whileTap={{
       scale: 0.97
-    }} onClick={() => setShowAISummary(true)} className="absolute top-16 md:top-20 right-2 md:right-4 z-10 gap-1.5 md:gap-2 py-2 md:py-2.5 rounded-full liquid-glass text-foreground text-xs md:text-sm font-medium hover-lift press-effect px-2.5 md:px-[10px] flex-row flex items-center justify-center">
+    }} onClick={() => setShowAISummary(true)} className="absolute top-16 md:top-20 right-2 md:right-4 z-10 gap-1.5 md:gap-2 py-2 md:py-2.5 liquid-glass text-foreground text-xs md:text-sm font-medium hover-lift press-effect px-2.5 md:px-[10px] rounded text-center flex-row flex items-center justify-center">
         <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" />
         <span className="hidden sm:inline">AI Summary</span>
       </motion.button>
