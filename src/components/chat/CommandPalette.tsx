@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MessageCircle, Users, Hash, Settings, User, Moon, Sun, Plus, Sparkles } from 'lucide-react';
 import { conversations, users } from '@/lib/mockData';
 import { cn } from '@/lib/utils';
-import { RaneLogo } from '@/components/RaneLogo';
+import { LinkUpLogo } from '@/components/LinkUpLogo';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -249,7 +249,7 @@ export function CommandPalette({ isOpen, onClose, onSelectConversation }: Comman
                   Select
                 </span>
               </div>
-              <RaneLogo size="sm" />
+              <LinkUpLogo size="sm" />
             </div>
           </motion.div>
         </>

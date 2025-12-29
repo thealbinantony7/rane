@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, memo } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Sidebar } from '@/components/chat/Sidebar';
 import { ChatViewReal } from '@/components/chat/ChatViewReal';
@@ -7,21 +7,20 @@ import { CommandPalette } from '@/components/chat/CommandPalette';
 import { SettingsModal } from '@/components/settings/SettingsModal';
 import { NewConversationModal } from '@/components/chat/NewConversationModal';
 import { CallModal } from '@/components/chat/CallModal';
+import { MeshBackground } from '@/components/MeshBackground';
 import { useConversations, useProfiles, Conversation } from '@/hooks/useDatabase';
 import { useAuth } from '@/hooks/useAuth';
-import { useDemoMode, DemoConversation } from '@/hooks/useDemoMode';
+import { useDemoMode } from '@/hooks/useDemoMode';
 import { Helmet } from 'react-helmet';
 
-const Index = () => {
+const Index = memo(function Index() {
   const { user } = useAuth();
   const { conversations: dbConversations, loading: conversationsLoading, refetch, createConversation } = useConversations();
   const { profiles } = useProfiles();
-  const { demoConversations, getDemoMessages, sendDemoMessage, getDemoUser, currentUser } = useDemoMode();
+  const { demoConversations, getDemoMessages, sendDemoMessage, getDemoUser } = useDemoMode();
   
-  // Use demo mode if no real conversations and not loading
   const isDemoMode = !conversationsLoading && dbConversations.length === 0;
   
-  // Convert demo conversations to the Conversation type for compatibility
   const conversations: Conversation[] = useMemo(() => {
     if (isDemoMode) {
       return demoConversations.map(dc => ({
@@ -50,7 +49,6 @@ const Index = () => {
   const [callData, setCallData] = useState<{ type: 'voice' | 'video'; participant: { name: string; avatar: string } } | null>(null);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  // Keyboard shortcut for command palette
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -63,12 +61,10 @@ const Index = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Force dark mode
   useEffect(() => {
     document.documentElement.classList.add('dark');
   }, []);
 
-  // Update active conversation when conversations change
   useEffect(() => {
     if (activeConversation) {
       const updated = conversations.find(c => c.id === activeConversation.id);
@@ -80,7 +76,7 @@ const Index = () => {
 
   const handleSelectConversation = (conversation: Conversation) => {
     setActiveConversation(conversation);
-    setIsMobileSidebarOpen(false); // Close sidebar on mobile when selecting
+    setIsMobileSidebarOpen(false);
   };
 
   const handleSelectConversationById = (conversationId: string) => {
@@ -123,11 +119,14 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Rane - Next Generation Messaging</title>
-        <meta name="description" content="A premium, real-time messaging platform with end-to-end encryption, beautiful design, and powerful features." />
+        <title>LINKUP - Premium Messaging Platform</title>
+        <meta name="description" content="A premium, real-time messaging platform with end-to-end encryption, beautiful monochrome design, and powerful features." />
       </Helmet>
 
-      <div className="h-screen flex overflow-hidden bg-background">
+      {/* Animated Mesh Background */}
+      <MeshBackground />
+
+      <div className="h-screen flex overflow-hidden relative">
         {/* Sidebar */}
         <Sidebar
           conversations={conversations}
@@ -210,6 +209,6 @@ const Index = () => {
       </div>
     </>
   );
-};
+});
 
 export default Index;

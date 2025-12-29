@@ -5,7 +5,7 @@ import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { z } from 'zod';
-import { RaneLogo } from '@/components/RaneLogo';
+import { LinkUpLogo } from '@/components/LinkUpLogo';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -121,7 +121,7 @@ export default function Auth() {
             transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.1 }}
             className="float"
           >
-            <RaneLogo size="lg" showText={false} animated />
+            <LinkUpLogo size="lg" showText={false} animated />
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 10 }}
