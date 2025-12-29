@@ -1,5 +1,5 @@
 import { useState, memo } from 'react';
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Settings, Plus, X, Home, MessageSquare, Users, Hash, User } from 'lucide-react';
 import { Conversation } from '@/hooks/useDatabase';
 import { cn } from '@/lib/utils';
@@ -100,31 +100,6 @@ export const Sidebar = memo(function Sidebar({
     onMobileClose?.();
   };
 
-  // Staggered animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 16, scale: 0.95 },
-    show: { 
-      opacity: 1, 
-      y: 0, 
-      scale: 1,
-      transition: {
-        type: 'spring' as const,
-        stiffness: 400,
-        damping: 25,
-      },
-    },
-  };
-
   return (
     <>
       {/* Mobile overlay */}
@@ -135,183 +110,154 @@ export const Sidebar = memo(function Sidebar({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onMobileClose}
-            className="fixed inset-0 bg-background/80 backdrop-blur-xl z-40 md:hidden"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
           />
         )}
       </AnimatePresence>
 
-      <motion.aside 
+      <aside 
         className={cn(
-          "h-full glass-panel flex flex-col z-50",
+          "h-full bg-card/95 backdrop-blur-xl border-r border-border/50 flex flex-col z-50",
           "hidden md:flex md:w-80",
           isMobileOpen && "fixed inset-y-0 left-0 flex w-[85vw] max-w-[320px] md:relative md:w-80"
         )}
-        initial={false}
-        animate={isMobileOpen ? { x: 0 } : undefined}
       >
         {/* Header */}
-        <div className="p-4 md:p-5 border-b border-border/50">
+        <div className="p-4 border-b border-border/50">
           <div className="flex items-center justify-between mb-4">
             <LinkUpLogo size="sm" />
             <div className="flex items-center gap-1">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <button
                 onClick={onNewConversation}
-                className="p-2.5 rounded-lg hover:bg-surface-2 transition-all duration-200 magnetic-hover"
+                className="p-2 rounded-lg hover:bg-muted transition-colors"
               >
                 <Plus className="w-5 h-5 text-muted-foreground" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              </button>
+              <button
                 onClick={onOpenSettings}
-                className="p-2.5 rounded-lg hover:bg-surface-2 transition-all duration-200 magnetic-hover"
+                className="p-2 rounded-lg hover:bg-muted transition-colors"
               >
                 <Settings className="w-5 h-5 text-muted-foreground" />
-              </motion.button>
-              {/* Profile Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              </button>
+              <button
                 onClick={() => setShowProfileHub(true)}
-                className="p-2.5 rounded-lg hover:bg-surface-2 transition-all duration-200 magnetic-hover"
+                className="p-2 rounded-lg hover:bg-muted transition-colors"
               >
                 <User className="w-5 h-5 text-muted-foreground" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              </button>
+              <button
                 onClick={onMobileClose}
-                className="p-2.5 rounded-lg hover:bg-surface-2 transition-all duration-200 md:hidden"
+                className="p-2 rounded-lg hover:bg-muted transition-colors md:hidden"
               >
                 <X className="w-5 h-5 text-muted-foreground" />
-              </motion.button>
+              </button>
             </div>
           </div>
 
           {/* Search */}
-          <motion.button
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
+          <button
             onClick={onOpenCommandPalette}
-            className="w-full flex items-center gap-3 px-4 py-3 bg-surface-2/50 rounded-lg text-muted-foreground hover:bg-surface-2/80 transition-all duration-200 border border-border/30"
+            className="w-full flex items-center gap-3 px-4 py-3 bg-muted/50 rounded-lg text-muted-foreground hover:bg-muted transition-colors border border-border/30"
           >
             <Search className="w-4 h-4" />
             <span className="text-sm flex-1 text-left">Search</span>
-            <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border border-border/50 bg-surface-3/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+            <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-border/50 bg-background px-1.5 font-mono text-[10px] text-muted-foreground">
               ⌘K
             </kbd>
-          </motion.button>
+          </button>
 
-          {/* Filter tabs with icons - Functional buttons */}
+          {/* Filter tabs */}
           <div className="flex items-center gap-1 mt-4 overflow-x-auto scrollbar-thin pb-1">
             {filters.map(({ key, label, icon: Icon }) => (
-              <motion.button
+              <button
                 key={key}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.95 }}
                 onClick={() => setFilter(key)}
                 className={cn(
-                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap',
+                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap',
                   filter === key
                     ? 'bg-foreground text-background'
-                    : 'bg-surface-2/40 text-muted-foreground hover:bg-surface-2/80 hover:text-foreground border border-border/30'
+                    : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
                 )}
               >
                 <Icon className="w-3.5 h-3.5" />
                 {label}
-              </motion.button>
+              </button>
             ))}
           </div>
         </div>
 
-        {/* Conversations List with staggered animation */}
+        {/* Conversations List */}
         <div className="flex-1 overflow-y-auto scrollbar-thin p-2">
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="w-6 h-6 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
             </div>
           ) : (
-            <LayoutGroup>
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-              >
-                {pinnedConversations.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-[10px] font-medium text-muted-foreground px-3 mb-2 uppercase tracking-widest">
-                      Pinned
-                    </p>
-                    {pinnedConversations.map((conv, index) => (
-                      <motion.div key={conv.id} variants={itemVariants} layout layoutId={conv.id}>
-                        <ConversationItem
-                          conversation={conv}
-                          isActive={activeConversation?.id === conv.id}
-                          onClick={() => handleSelectConversation(conv)}
-                          name={getConversationName(conv)}
-                          avatar={getConversationAvatar(conv)}
-                          status={getOtherMemberStatus(conv)}
-                          formatTime={formatTime}
-                          currentUserId={user?.id}
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
+            <>
+              {pinnedConversations.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-medium text-muted-foreground px-3 mb-2 uppercase tracking-widest">
+                    Pinned
+                  </p>
+                  {pinnedConversations.map((conv) => (
+                    <ConversationItem
+                      key={conv.id}
+                      conversation={conv}
+                      isActive={activeConversation?.id === conv.id}
+                      onClick={() => handleSelectConversation(conv)}
+                      name={getConversationName(conv)}
+                      avatar={getConversationAvatar(conv)}
+                      status={getOtherMemberStatus(conv)}
+                      formatTime={formatTime}
+                      currentUserId={user?.id}
+                    />
+                  ))}
+                </div>
+              )}
 
-                {otherConversations.length > 0 && (
-                  <div>
-                    {pinnedConversations.length > 0 && (
-                      <p className="text-[10px] font-medium text-muted-foreground px-3 mb-2 uppercase tracking-widest">
-                        Recent
-                      </p>
-                    )}
-                    {otherConversations.map((conv, index) => (
-                      <motion.div key={conv.id} variants={itemVariants} layout layoutId={conv.id}>
-                        <ConversationItem
-                          conversation={conv}
-                          isActive={activeConversation?.id === conv.id}
-                          onClick={() => handleSelectConversation(conv)}
-                          name={getConversationName(conv)}
-                          avatar={getConversationAvatar(conv)}
-                          status={getOtherMemberStatus(conv)}
-                          formatTime={formatTime}
-                          currentUserId={user?.id}
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-              </motion.div>
+              {otherConversations.length > 0 && (
+                <div>
+                  {pinnedConversations.length > 0 && (
+                    <p className="text-[10px] font-medium text-muted-foreground px-3 mb-2 uppercase tracking-widest">
+                      Recent
+                    </p>
+                  )}
+                  {otherConversations.map((conv) => (
+                    <ConversationItem
+                      key={conv.id}
+                      conversation={conv}
+                      isActive={activeConversation?.id === conv.id}
+                      onClick={() => handleSelectConversation(conv)}
+                      name={getConversationName(conv)}
+                      avatar={getConversationAvatar(conv)}
+                      status={getOtherMemberStatus(conv)}
+                      formatTime={formatTime}
+                      currentUserId={user?.id}
+                    />
+                  ))}
+                </div>
+              )}
 
               {filteredConversations.length === 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex flex-col items-center justify-center py-12 text-center"
-                >
+                <div className="flex flex-col items-center justify-center py-12 text-center">
                   <MessageSquare className="w-10 h-10 text-muted-foreground/30 mb-3" />
                   <p className="text-sm text-muted-foreground">
                     {conversations.length === 0 ? 'No conversations yet' : 'No conversations found'}
                   </p>
                   {conversations.length === 0 && (
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.95 }}
+                    <button
                       onClick={onNewConversation}
-                      className="mt-3 px-4 py-2 bg-foreground text-background rounded-lg text-sm font-medium"
+                      className="mt-3 px-4 py-2 bg-foreground text-background rounded-lg text-sm font-medium hover:bg-foreground/90 transition-colors"
                     >
                       Start a conversation
-                    </motion.button>
+                    </button>
                   )}
-                </motion.div>
+                </div>
               )}
-            </LayoutGroup>
+            </>
           )}
         </div>
-      </motion.aside>
+      </aside>
 
       {/* Profile Hub Modal */}
       <ProfileHub isOpen={showProfileHub} onClose={() => setShowProfileHub(false)} />
@@ -343,34 +289,29 @@ const ConversationItem = memo(function ConversationItem({
   const isFromMe = conversation.last_message?.sender_id === currentUserId;
 
   return (
-    <motion.button
-      whileHover={{ x: 4, backgroundColor: 'hsl(var(--surface-2) / 0.8)' }}
-      whileTap={{ scale: 0.98 }}
+    <button
       onClick={onClick}
       className={cn(
-        'w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 text-left',
+        'w-full flex items-center gap-3 p-3 rounded-lg transition-colors text-left',
         isActive 
-          ? 'bg-surface-2/80 border border-border/30' 
-          : 'hover:bg-surface-2/50'
+          ? 'bg-muted' 
+          : 'hover:bg-muted/50'
       )}
     >
-      {/* Avatar with layoutId for shared transitions */}
-      <motion.div 
-        className="relative flex-shrink-0"
-        layoutId={`avatar-${conversation.id}`}
-      >
+      {/* Avatar */}
+      <div className="relative flex-shrink-0">
         {conversation.type === 'channel' ? (
-          <div className="w-11 h-11 rounded-lg bg-surface-3/80 flex items-center justify-center text-muted-foreground font-semibold border border-border/30">
+          <div className="w-11 h-11 rounded-lg bg-muted flex items-center justify-center text-muted-foreground">
             <Hash className="w-5 h-5" />
           </div>
         ) : conversation.type === 'group' ? (
-          <div className="w-11 h-11 rounded-lg bg-surface-3/80 flex items-center justify-center border border-border/30">
+          <div className="w-11 h-11 rounded-lg bg-muted flex items-center justify-center">
             <Users className="w-5 h-5 text-muted-foreground" />
           </div>
         ) : avatar ? (
-          <img src={avatar} alt={name} className="w-11 h-11 rounded-lg object-cover border border-border/30" />
+          <img src={avatar} alt={name} className="w-11 h-11 rounded-lg object-cover" />
         ) : (
-          <div className="w-11 h-11 rounded-lg bg-surface-3/80 flex items-center justify-center text-muted-foreground font-semibold border border-border/30">
+          <div className="w-11 h-11 rounded-lg bg-muted flex items-center justify-center text-muted-foreground font-semibold">
             {name.charAt(0).toUpperCase()}
           </div>
         )}
@@ -379,25 +320,22 @@ const ConversationItem = memo(function ConversationItem({
           <span
             className={cn(
               'absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-card',
-              status === 'online' && 'bg-status-online',
-              status === 'away' && 'bg-status-away'
+              status === 'online' && 'bg-green-500',
+              status === 'away' && 'bg-yellow-500'
             )}
           />
         )}
-      </motion.div>
+      </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2">
-          <motion.span 
-            layoutId={`name-${conversation.id}`}
-            className={cn(
-              'font-medium truncate text-sm',
-              (conversation.unread_count || 0) > 0 ? 'text-foreground' : 'text-foreground/80'
-            )}
-          >
+          <span className={cn(
+            'font-medium truncate text-sm',
+            (conversation.unread_count || 0) > 0 ? 'text-foreground' : 'text-foreground/80'
+          )}>
             {name}
-          </motion.span>
+          </span>
           {conversation.last_message && (
             <span className="text-[10px] text-muted-foreground flex-shrink-0">
               {formatTime(conversation.last_message.created_at)}
@@ -415,16 +353,12 @@ const ConversationItem = memo(function ConversationItem({
           </p>
           
           {(conversation.unread_count || 0) > 0 && (
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="flex-shrink-0 min-w-[18px] h-[18px] px-1 rounded-full bg-foreground text-background text-[10px] font-medium flex items-center justify-center pulse-glow"
-            >
+            <span className="flex-shrink-0 min-w-[18px] h-[18px] px-1 rounded-full bg-foreground text-background text-[10px] font-medium flex items-center justify-center">
               {conversation.unread_count}
-            </motion.span>
+            </span>
           )}
         </div>
       </div>
-    </motion.button>
+    </button>
   );
 });
