@@ -96,7 +96,7 @@ export function ChatView({ conversation, onToggleInfo }: ChatViewProps) {
           >
             <MessageCircle className="w-10 h-10 text-primary" />
           </motion.div>
-          <h2 className="text-2xl font-display font-semibold text-foreground mb-2">Welcome to Rane</h2>
+          <h2 className="text-2xl font-display font-semibold text-foreground mb-2">Welcome to LINKUP</h2>
           <p className="text-muted-foreground max-w-sm">Select a conversation to start messaging.</p>
           <p className="text-sm text-muted-foreground/60 mt-4">
             Press <kbd className="px-2 py-1 rounded bg-surface-2 font-mono text-xs">⌘K</kbd> to search
