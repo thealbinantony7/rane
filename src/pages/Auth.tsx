@@ -129,7 +129,7 @@ export default function Auth() {
             transition={{ delay: 0.25, duration: 0.5 }}
             className="text-3xl font-display text-foreground mt-6 mb-1.5"
           >
-            Rane
+            LINKUP
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
@@ -311,8 +311,8 @@ export default function Auth() {
           transition={{ delay: 0.5 }}
           className="text-center text-sm text-muted-foreground mt-6"
         >
-          By continuing, you agree to Rane's{' '}
-          <a href="#" className="text-primary hover:underline">Terms of Service</a>
+          By continuing, you agree to LINKUP's{' '}
+          <a href="#" className="text-foreground hover:underline">Terms of Service</a>
           {' '}and{' '}
           <a href="#" className="text-primary hover:underline">Privacy Policy</a>
         </motion.p>

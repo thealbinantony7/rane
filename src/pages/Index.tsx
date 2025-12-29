@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, memo } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion, LayoutGroup } from 'framer-motion';
 import { Sidebar } from '@/components/chat/Sidebar';
 import { ChatViewReal } from '@/components/chat/ChatViewReal';
 import { InfoPanel } from '@/components/chat/InfoPanel';
@@ -120,93 +120,110 @@ const Index = memo(function Index() {
     <>
       <Helmet>
         <title>LINKUP - Premium Messaging Platform</title>
-        <meta name="description" content="A premium, real-time messaging platform with end-to-end encryption, beautiful monochrome design, and powerful features." />
+        <meta name="description" content="LINKUP is a premium, real-time messaging platform with end-to-end encryption, beautiful monochrome design, and powerful features." />
       </Helmet>
 
       {/* Animated Mesh Background */}
       <MeshBackground />
 
-      <div className="h-screen flex overflow-hidden relative">
-        {/* Sidebar */}
-        <Sidebar
-          conversations={conversations}
-          activeConversation={activeConversation}
-          onSelectConversation={handleSelectConversation}
-          onOpenCommandPalette={() => setShowCommandPalette(true)}
-          onOpenSettings={() => setShowSettings(true)}
-          onNewConversation={() => setShowNewConversation(true)}
-          loading={conversationsLoading}
-          isMobileOpen={isMobileSidebarOpen}
-          onMobileClose={() => setIsMobileSidebarOpen(false)}
-        />
+      <LayoutGroup>
+        <div className="h-screen flex overflow-hidden relative">
+          {/* Sidebar */}
+          <Sidebar
+            conversations={conversations}
+            activeConversation={activeConversation}
+            onSelectConversation={handleSelectConversation}
+            onOpenCommandPalette={() => setShowCommandPalette(true)}
+            onOpenSettings={() => setShowSettings(true)}
+            onNewConversation={() => setShowNewConversation(true)}
+            loading={conversationsLoading}
+            isMobileOpen={isMobileSidebarOpen}
+            onMobileClose={() => setIsMobileSidebarOpen(false)}
+          />
 
-        {/* Main Chat View */}
-        <ChatViewReal
-          conversation={activeConversation}
-          onToggleInfo={() => setShowInfo(!showInfo)}
-          onCall={handleCall}
-          profiles={profiles}
-          isDemoMode={isDemoMode}
-          getDemoMessages={getDemoMessages}
-          sendDemoMessage={sendDemoMessage}
-          getDemoUser={getDemoUser}
-          onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
-        />
+          {/* Main Chat View with slide transition */}
+          <motion.div
+            className="flex-1 flex"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          >
+            <ChatViewReal
+              conversation={activeConversation}
+              onToggleInfo={() => setShowInfo(!showInfo)}
+              onCall={handleCall}
+              profiles={profiles}
+              isDemoMode={isDemoMode}
+              getDemoMessages={getDemoMessages}
+              sendDemoMessage={sendDemoMessage}
+              getDemoUser={getDemoUser}
+              onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
+            />
+          </motion.div>
 
-        {/* Info Panel */}
-        <AnimatePresence>
-          {showInfo && activeConversation && (
-            <InfoPanel
-              conversation={{
-                id: activeConversation.id,
-                type: activeConversation.type as 'direct' | 'group' | 'channel',
-                name: activeConversation.name || '',
-                participants: (activeConversation.members || []).map(m => ({
-                  id: m.user_id,
-                  name: m.profile?.display_name || m.profile?.username || 'Unknown',
-                  username: m.profile?.username || '',
-                  avatar: m.profile?.avatar_url || '',
-                  status: (m.profile?.status as 'online' | 'away' | 'offline') || 'offline',
-                })),
-                unreadCount: activeConversation.unread_count || 0,
-                isPinned: activeConversation.is_pinned,
-                isMuted: activeConversation.is_muted,
-              }}
-              onClose={() => setShowInfo(false)}
+          {/* Info Panel with slide transition */}
+          <AnimatePresence>
+            {showInfo && activeConversation && (
+              <motion.div
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 320, opacity: 1 }}
+                exit={{ width: 0, opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                className="overflow-hidden"
+              >
+                <InfoPanel
+                  conversation={{
+                    id: activeConversation.id,
+                    type: activeConversation.type as 'direct' | 'group' | 'channel',
+                    name: activeConversation.name || '',
+                    participants: (activeConversation.members || []).map(m => ({
+                      id: m.user_id,
+                      name: m.profile?.display_name || m.profile?.username || 'Unknown',
+                      username: m.profile?.username || '',
+                      avatar: m.profile?.avatar_url || '',
+                      status: (m.profile?.status as 'online' | 'away' | 'offline') || 'offline',
+                    })),
+                    unreadCount: activeConversation.unread_count || 0,
+                    isPinned: activeConversation.is_pinned,
+                    isMuted: activeConversation.is_muted,
+                  }}
+                  onClose={() => setShowInfo(false)}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Command Palette with blur backdrop */}
+          <CommandPalette
+            isOpen={showCommandPalette}
+            onClose={() => setShowCommandPalette(false)}
+            onSelectConversation={handleSelectConversationById}
+          />
+
+          {/* Settings Modal */}
+          <SettingsModal
+            isOpen={showSettings}
+            onClose={() => setShowSettings(false)}
+          />
+
+          {/* New Conversation Modal */}
+          <NewConversationModal
+            isOpen={showNewConversation}
+            onClose={() => setShowNewConversation(false)}
+            onCreate={handleCreateConversation}
+          />
+
+          {/* Call Modal */}
+          {callData && (
+            <CallModal
+              isOpen={!!callData}
+              onClose={() => setCallData(null)}
+              type={callData.type}
+              participant={callData.participant}
             />
           )}
-        </AnimatePresence>
-
-        {/* Command Palette */}
-        <CommandPalette
-          isOpen={showCommandPalette}
-          onClose={() => setShowCommandPalette(false)}
-          onSelectConversation={handleSelectConversationById}
-        />
-
-        {/* Settings Modal */}
-        <SettingsModal
-          isOpen={showSettings}
-          onClose={() => setShowSettings(false)}
-        />
-
-        {/* New Conversation Modal */}
-        <NewConversationModal
-          isOpen={showNewConversation}
-          onClose={() => setShowNewConversation(false)}
-          onCreate={handleCreateConversation}
-        />
-
-        {/* Call Modal */}
-        {callData && (
-          <CallModal
-            isOpen={!!callData}
-            onClose={() => setCallData(null)}
-            type={callData.type}
-            participant={callData.participant}
-          />
-        )}
-      </div>
+        </div>
+      </LayoutGroup>
     </>
   );
 });
