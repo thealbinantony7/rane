@@ -76,13 +76,13 @@ export function MessageBubble({
           </div>
         )}
 
-        {/* Message Content */}
+        {/* Message Content - Telegram style bubbles with tails */}
         <div
           className={cn(
             'px-3 py-2 md:px-4 md:py-2.5 rounded-2xl relative',
             isOwnMessage
-              ? 'bg-message-own text-primary-foreground rounded-br-md'
-              : 'bg-message-other text-card-foreground rounded-bl-md'
+              ? 'bg-message-own text-primary-foreground rounded-br-sm bubble-tail-own'
+              : 'bg-message-other text-card-foreground rounded-bl-sm bubble-tail-other border border-border/30'
           )}
         >
           {/* Self-destruct indicator */}

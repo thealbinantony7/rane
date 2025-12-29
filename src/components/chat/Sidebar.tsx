@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Settings, Filter, Plus, X, Menu } from 'lucide-react';
+import { Search, Settings, Plus, X, Home, MessageSquare, Users, Hash } from 'lucide-react';
 import { Conversation } from '@/hooks/useDatabase';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
-import { RaneLogo } from '@/components/RaneLogo';
+import { LinkUpLogo } from '@/components/LinkUpLogo';
 
 interface SidebarProps {
   conversations: Conversation[];
@@ -20,7 +20,7 @@ interface SidebarProps {
 
 type FilterType = 'all' | 'unread' | 'groups' | 'channels';
 
-export function Sidebar({ 
+export const Sidebar = memo(function Sidebar({ 
   conversations, 
   activeConversation, 
   onSelectConversation, 
@@ -45,11 +45,11 @@ export function Sidebar({
   const pinnedConversations = filteredConversations.filter(c => c.is_pinned);
   const otherConversations = filteredConversations.filter(c => !c.is_pinned);
 
-  const filters: { key: FilterType; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: 'unread', label: 'Unread' },
-    { key: 'groups', label: 'Groups' },
-    { key: 'channels', label: 'Channels' },
+  const filters: { key: FilterType; label: string; icon: React.ElementType }[] = [
+    { key: 'all', label: 'All', icon: Home },
+    { key: 'unread', label: 'Unread', icon: MessageSquare },
+    { key: 'groups', label: 'Groups', icon: Users },
+    { key: 'channels', label: 'Channels', icon: Hash },
   ];
 
   const getConversationName = (conv: Conversation) => {
@@ -95,7 +95,6 @@ export function Sidebar({
 
   const handleSelectConversation = (conversation: Conversation) => {
     onSelectConversation(conversation);
-    // Close mobile sidebar after selecting
     onMobileClose?.();
   };
 
@@ -109,17 +108,15 @@ export function Sidebar({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onMobileClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
           />
         )}
       </AnimatePresence>
 
-      <motion.div 
+      <motion.aside 
         className={cn(
-          "h-full liquid-glass border-r border-border/30 flex flex-col z-50",
-          // Desktop: always visible
+          "h-full glass-panel flex flex-col z-50",
           "hidden md:flex md:w-80",
-          // Mobile: slide in from left
           isMobileOpen && "fixed inset-y-0 left-0 flex w-[85vw] max-w-[320px] md:relative md:w-80"
         )}
         initial={false}
@@ -128,13 +125,13 @@ export function Sidebar({
         {/* Header */}
         <div className="p-4 md:p-5 border-b border-border/50">
           <div className="flex items-center justify-between mb-4">
-            <RaneLogo size="sm" />
+            <LinkUpLogo size="sm" />
             <div className="flex items-center gap-1">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onNewConversation}
-                className="p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect"
+                className="p-2.5 rounded-lg hover:bg-surface-2 transition-all duration-200 magnetic-hover"
                 title="New conversation"
               >
                 <Plus className="w-5 h-5 text-muted-foreground" />
@@ -143,17 +140,16 @@ export function Sidebar({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onOpenSettings}
-                className="p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect"
+                className="p-2.5 rounded-lg hover:bg-surface-2 transition-all duration-200 magnetic-hover"
                 title="Settings"
               >
                 <Settings className="w-5 h-5 text-muted-foreground" />
               </motion.button>
-              {/* Mobile close button */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onMobileClose}
-                className="p-2.5 rounded-xl hover:bg-surface-2 transition-all duration-200 press-effect md:hidden"
+                className="p-2.5 rounded-lg hover:bg-surface-2 transition-all duration-200 md:hidden"
                 title="Close"
               >
                 <X className="w-5 h-5 text-muted-foreground" />
@@ -161,118 +157,119 @@ export function Sidebar({
             </div>
           </div>
 
-        {/* Search */}
-        <motion.button
-          whileHover={{ scale: 1.01, y: -1 }}
-          whileTap={{ scale: 0.99 }}
-          onClick={onOpenCommandPalette}
-          className="w-full flex items-center gap-3 px-4 py-3 bg-surface-2/50 rounded-xl text-muted-foreground hover:bg-surface-2/80 transition-all duration-200 border border-border/20 shadow-glass hover-lift"
-        >
-          <Search className="w-4 h-4" />
-          <span className="text-sm flex-1 text-left">Search</span>
-          <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded-md border border-border/30 bg-surface-3/40 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-            ⌘K
-          </kbd>
-        </motion.button>
+          {/* Search */}
+          <motion.button
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+            onClick={onOpenCommandPalette}
+            className="w-full flex items-center gap-3 px-4 py-3 bg-surface-2/50 rounded-lg text-muted-foreground hover:bg-surface-2/80 transition-all duration-200 border border-border/30"
+          >
+            <Search className="w-4 h-4" />
+            <span className="text-sm flex-1 text-left">Search</span>
+            <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border border-border/50 bg-surface-3/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+              ⌘K
+            </kbd>
+          </motion.button>
 
-        {/* Filters */}
-        <div className="flex items-center gap-1.5 mt-4 overflow-x-auto scrollbar-thin pb-1">
-          {filters.map(({ key, label }) => (
-            <motion.button
-              key={key}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setFilter(key)}
-              className={cn(
-                'px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap press-effect',
-                filter === key
-                  ? 'bg-primary text-primary-foreground glow-primary'
-                  : 'bg-surface-2/40 text-muted-foreground hover:bg-surface-2/80 hover:text-foreground border border-border/20'
-              )}
-            >
-              {label}
-            </motion.button>
-          ))}
-        </div>
-      </div>
-
-      {/* Conversations List */}
-      <div className="flex-1 overflow-y-auto scrollbar-thin p-2">
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          {/* Filter tabs with icons */}
+          <div className="flex items-center gap-1 mt-4 overflow-x-auto scrollbar-thin pb-1">
+            {filters.map(({ key, label, icon: Icon }) => (
+              <motion.button
+                key={key}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setFilter(key)}
+                className={cn(
+                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap',
+                  filter === key
+                    ? 'bg-foreground text-background'
+                    : 'bg-surface-2/40 text-muted-foreground hover:bg-surface-2/80 hover:text-foreground border border-border/30'
+                )}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                {label}
+              </motion.button>
+            ))}
           </div>
-        ) : (
-          <>
-            {pinnedConversations.length > 0 && (
-              <div className="mb-4">
-                <p className="text-xs font-medium text-muted-foreground px-3 mb-2 uppercase tracking-wider">
-                  Pinned
-                </p>
-              {pinnedConversations.map((conv) => (
-                  <ConversationItemComponent
-                    key={conv.id}
-                    conversation={conv}
-                    isActive={activeConversation?.id === conv.id}
-                    onClick={() => handleSelectConversation(conv)}
-                    name={getConversationName(conv)}
-                    avatar={getConversationAvatar(conv)}
-                    status={getOtherMemberStatus(conv)}
-                    formatTime={formatTime}
-                    currentUserId={user?.id}
-                  />
-                ))}
-              </div>
-            )}
+        </div>
 
-            {otherConversations.length > 0 && (
-              <div>
-                {pinnedConversations.length > 0 && (
-                  <p className="text-xs font-medium text-muted-foreground px-3 mb-2 uppercase tracking-wider">
-                    Recent
+        {/* Conversations List */}
+        <div className="flex-1 overflow-y-auto scrollbar-thin p-2">
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="w-6 h-6 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <>
+              {pinnedConversations.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-medium text-muted-foreground px-3 mb-2 uppercase tracking-widest">
+                    Pinned
                   </p>
-                )}
-                {otherConversations.map((conv) => (
-                  <ConversationItemComponent
-                    key={conv.id}
-                    conversation={conv}
-                    isActive={activeConversation?.id === conv.id}
-                    onClick={() => handleSelectConversation(conv)}
-                    name={getConversationName(conv)}
-                    avatar={getConversationAvatar(conv)}
-                    status={getOtherMemberStatus(conv)}
-                    formatTime={formatTime}
-                    currentUserId={user?.id}
-                  />
-                ))}
-              </div>
-            )}
+                  {pinnedConversations.map((conv) => (
+                    <ConversationItem
+                      key={conv.id}
+                      conversation={conv}
+                      isActive={activeConversation?.id === conv.id}
+                      onClick={() => handleSelectConversation(conv)}
+                      name={getConversationName(conv)}
+                      avatar={getConversationAvatar(conv)}
+                      status={getOtherMemberStatus(conv)}
+                      formatTime={formatTime}
+                      currentUserId={user?.id}
+                    />
+                  ))}
+                </div>
+              )}
 
-            {filteredConversations.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <Filter className="w-10 h-10 text-muted-foreground/50 mb-3" />
-                <p className="text-sm text-muted-foreground">
-                  {conversations.length === 0 ? 'No conversations yet' : 'No conversations found'}
-                </p>
-                {conversations.length === 0 && (
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={onNewConversation}
-                    className="mt-3 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium"
-                  >
-                    Start a conversation
-                  </motion.button>
-                )}
-              </div>
-            )}
-          </>
-        )}
-      </div>
-      </motion.div>
+              {otherConversations.length > 0 && (
+                <div>
+                  {pinnedConversations.length > 0 && (
+                    <p className="text-[10px] font-medium text-muted-foreground px-3 mb-2 uppercase tracking-widest">
+                      Recent
+                    </p>
+                  )}
+                  {otherConversations.map((conv) => (
+                    <ConversationItem
+                      key={conv.id}
+                      conversation={conv}
+                      isActive={activeConversation?.id === conv.id}
+                      onClick={() => handleSelectConversation(conv)}
+                      name={getConversationName(conv)}
+                      avatar={getConversationAvatar(conv)}
+                      status={getOtherMemberStatus(conv)}
+                      formatTime={formatTime}
+                      currentUserId={user?.id}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {filteredConversations.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <MessageSquare className="w-10 h-10 text-muted-foreground/30 mb-3" />
+                  <p className="text-sm text-muted-foreground">
+                    {conversations.length === 0 ? 'No conversations yet' : 'No conversations found'}
+                  </p>
+                  {conversations.length === 0 && (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={onNewConversation}
+                      className="mt-3 px-4 py-2 bg-foreground text-background rounded-lg text-sm font-medium"
+                    >
+                      Start a conversation
+                    </motion.button>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </motion.aside>
     </>
   );
-}
+});
 
 interface ConversationItemProps {
   conversation: Conversation;
@@ -285,7 +282,7 @@ interface ConversationItemProps {
   currentUserId: string | undefined;
 }
 
-function ConversationItemComponent({ 
+const ConversationItem = memo(function ConversationItem({ 
   conversation, 
   isActive, 
   onClick, 
@@ -299,41 +296,40 @@ function ConversationItemComponent({
 
   return (
     <motion.button
-      whileHover={{ scale: 1.01, x: 2 }}
+      whileHover={{ x: 2 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       className={cn(
-        'w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left press-effect',
+        'w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 text-left',
         isActive 
-          ? 'bg-surface-2/80 border border-border/20 shadow-glass' 
+          ? 'bg-surface-2/80 border border-border/30' 
           : 'hover:bg-surface-2/50'
       )}
     >
       {/* Avatar */}
       <div className="relative flex-shrink-0">
         {conversation.type === 'channel' ? (
-          <div className="w-12 h-12 rounded-2xl bg-surface-3/80 flex items-center justify-center text-muted-foreground font-semibold border border-border/20">
-            #
+          <div className="w-11 h-11 rounded-lg bg-surface-3/80 flex items-center justify-center text-muted-foreground font-semibold border border-border/30">
+            <Hash className="w-5 h-5" />
           </div>
         ) : conversation.type === 'group' ? (
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-primary/10">
-            <span className="text-primary font-semibold">{name.charAt(0)}</span>
+          <div className="w-11 h-11 rounded-lg bg-surface-3/80 flex items-center justify-center border border-border/30">
+            <Users className="w-5 h-5 text-muted-foreground" />
           </div>
         ) : avatar ? (
-          <img src={avatar} alt={name} className="w-12 h-12 rounded-2xl object-cover ring-1 ring-border/20" />
+          <img src={avatar} alt={name} className="w-11 h-11 rounded-lg object-cover border border-border/30" />
         ) : (
-          <div className="w-12 h-12 rounded-2xl bg-surface-3/80 flex items-center justify-center text-muted-foreground font-semibold border border-border/20">
-            {name.charAt(0)}
+          <div className="w-11 h-11 rounded-lg bg-surface-3/80 flex items-center justify-center text-muted-foreground font-semibold border border-border/30">
+            {name.charAt(0).toUpperCase()}
           </div>
         )}
         
-        {status && (
+        {status && status !== 'offline' && (
           <span
             className={cn(
-              'absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-card',
-              status === 'online' && 'bg-status-online',
-              status === 'away' && 'bg-status-away',
-              status === 'offline' && 'bg-muted'
+              'absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-card',
+              status === 'online' && 'bg-foreground',
+              status === 'away' && 'bg-muted-foreground'
             )}
           />
         )}
@@ -343,31 +339,29 @@ function ConversationItemComponent({
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2">
           <span className={cn(
-            'font-medium truncate',
-            (conversation.unread_count || 0) > 0 ? 'text-foreground' : 'text-foreground/90'
+            'font-medium truncate text-sm',
+            (conversation.unread_count || 0) > 0 ? 'text-foreground' : 'text-foreground/80'
           )}>
             {name}
           </span>
-          <div className="flex items-center gap-1 flex-shrink-0">
-            {conversation.last_message && (
-              <span className="text-xs text-muted-foreground">
-                {formatTime(conversation.last_message.created_at)}
-              </span>
-            )}
-          </div>
+          {conversation.last_message && (
+            <span className="text-[10px] text-muted-foreground flex-shrink-0">
+              {formatTime(conversation.last_message.created_at)}
+            </span>
+          )}
         </div>
         
         <div className="flex items-center justify-between gap-2 mt-0.5">
           <p className={cn(
-            'text-sm truncate',
-            (conversation.unread_count || 0) > 0 ? 'text-foreground/80' : 'text-muted-foreground'
+            'text-xs truncate',
+            (conversation.unread_count || 0) > 0 ? 'text-foreground/70' : 'text-muted-foreground'
           )}>
             {isFromMe && <span className="text-muted-foreground">You: </span>}
             {conversation.last_message?.content || 'No messages yet'}
           </p>
           
           {(conversation.unread_count || 0) > 0 && (
-            <span className="flex-shrink-0 min-w-[20px] h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium flex items-center justify-center glow-primary pulse-glow">
+            <span className="flex-shrink-0 min-w-[18px] h-[18px] px-1 rounded-full bg-foreground text-background text-[10px] font-medium flex items-center justify-center">
               {conversation.unread_count}
             </span>
           )}
@@ -375,4 +369,4 @@ function ConversationItemComponent({
       </div>
     </motion.button>
   );
-}
+});

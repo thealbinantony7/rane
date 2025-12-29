@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,76 +6,76 @@
 
 @layer base {
   :root {
-    /* Apple Light Mode */
+    /* LINKUP Monochrome Light Mode */
     --background: 0 0% 100%;
     --foreground: 0 0% 0%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
-    --primary: 211 100% 50%;
+    --primary: 0 0% 0%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
-    --accent: 280 100% 60%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --accent: 0 0% 90%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 0% 30%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 211 100% 50%;
-    --radius: 1rem;
+    --ring: 0 0% 0%;
+    --radius: 0.75rem;
 
-    /* Liquid Glass tokens */
-    --glass: 0 0% 100% / 0.65;
-    --glass-border: 0 0% 100% / 0.3;
+    /* Liquid Glass tokens - Light */
+    --glass: 0 0% 100% / 0.7;
+    --glass-border: 0 0% 0% / 0.08;
     --glass-highlight: 0 0% 100% / 0.5;
-    --glow: 211 100% 50% / 0.1;
+    --glow: 0 0% 0% / 0.05;
     --surface-1: 0 0% 98%;
     --surface-2: 0 0% 96%;
     --surface-3: 0 0% 93%;
-    --online: 142 71% 45%;
-    --away: 38 92% 50%;
-    --message-own: 211 100% 50%;
+    --online: 0 0% 40%;
+    --away: 0 0% 60%;
+    --message-own: 0 0% 0%;
     --message-other: 0 0% 95%;
   }
 
   .dark {
-    /* Apple Dark Mode - Deep blacks with liquid glass */
+    /* LINKUP Monochrome Dark Mode - Pure Black */
     --background: 0 0% 0%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 211 100% 55%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 98%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 55%;
-    --accent: 280 100% 65%;
+    --accent: 0 0% 15%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 72% 55%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 18%;
-    --input: 0 0% 15%;
-    --ring: 211 100% 55%;
+    --destructive: 0 0% 70%;
+    --destructive-foreground: 0 0% 0%;
+    --border: 0 0% 15%;
+    --input: 0 0% 12%;
+    --ring: 0 0% 100%;
 
     /* Liquid Glass tokens - Dark */
-    --glass: 0 0% 12% / 0.7;
-    --glass-border: 0 0% 100% / 0.08;
-    --glass-highlight: 0 0% 100% / 0.06;
-    --glow: 211 100% 55% / 0.15;
-    --surface-1: 0 0% 7%;
-    --surface-2: 0 0% 11%;
-    --surface-3: 0 0% 15%;
-    --online: 142 71% 45%;
-    --away: 38 92% 50%;
-    --message-own: 211 100% 50%;
-    --message-other: 0 0% 15%;
+    --glass: 0 0% 5% / 0.7;
+    --glass-border: 0 0% 100% / 0.1;
+    --glass-highlight: 0 0% 100% / 0.05;
+    --glow: 0 0% 100% / 0.03;
+    --surface-1: 0 0% 5%;
+    --surface-2: 0 0% 8%;
+    --surface-3: 0 0% 12%;
+    --online: 0 0% 80%;
+    --away: 0 0% 50%;
+    --message-own: 0 0% 100%;
+    --message-other: 0 0% 12%;
   }
 }
 
@@ -85,7 +85,7 @@
   }
 
   html {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+    font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: -0.01em;
@@ -97,12 +97,12 @@
 }
 
 @layer utilities {
-  /* Liquid Glass Effect */
+  /* Liquid Glass Effect - Premium */
   .liquid-glass {
     @apply relative overflow-hidden;
     background: hsl(var(--glass));
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
     border: 1px solid hsl(var(--glass-border));
   }
 
@@ -113,7 +113,7 @@
     background: linear-gradient(
       135deg,
       hsl(var(--glass-highlight)) 0%,
-      transparent 50%,
+      transparent 40%,
       transparent 100%
     );
     pointer-events: none;
@@ -122,19 +122,30 @@
   /* Subtle glass variant */
   .glass-subtle {
     background: hsl(var(--glass));
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    backdrop-filter: blur(32px) saturate(150%);
+    -webkit-backdrop-filter: blur(32px) saturate(150%);
     border: 1px solid hsl(var(--glass-border));
+  }
+
+  /* Glass panel - for sidebars and modals */
+  .glass-panel {
+    background: hsl(var(--glass));
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: 
+      0 4px 24px hsl(0 0% 0% / 0.1),
+      inset 0 1px 0 hsl(var(--glass-highlight));
   }
 
   /* Premium vibrancy */
   .vibrancy {
-    backdrop-filter: blur(60px) saturate(200%);
-    -webkit-backdrop-filter: blur(60px) saturate(200%);
+    backdrop-filter: blur(64px) saturate(200%);
+    -webkit-backdrop-filter: blur(64px) saturate(200%);
     background: hsl(var(--glass));
   }
 
-  /* Glow effects */
+  /* Monochrome glow effects */
   .glow {
     box-shadow: 
       0 0 40px hsl(var(--glow)),
@@ -149,39 +160,39 @@
   }
 
   .glow-primary {
-    box-shadow: 0 8px 32px hsl(var(--primary) / 0.3);
+    box-shadow: 0 4px 24px hsl(var(--foreground) / 0.15);
   }
 
   /* Premium shadows */
   .shadow-glass {
     box-shadow: 
-      0 2px 8px rgba(0, 0, 0, 0.04),
-      0 8px 24px rgba(0, 0, 0, 0.08),
+      0 2px 8px hsl(0 0% 0% / 0.04),
+      0 8px 24px hsl(0 0% 0% / 0.08),
       inset 0 1px 0 hsl(var(--glass-highlight));
   }
 
   .shadow-glass-lg {
     box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.06),
-      0 16px 48px rgba(0, 0, 0, 0.12),
+      0 4px 16px hsl(0 0% 0% / 0.06),
+      0 16px 48px hsl(0 0% 0% / 0.12),
       inset 0 1px 0 hsl(var(--glass-highlight));
   }
 
   .shadow-glass-xl {
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.08),
-      0 32px 80px rgba(0, 0, 0, 0.16),
+      0 8px 32px hsl(0 0% 0% / 0.08),
+      0 32px 80px hsl(0 0% 0% / 0.16),
       inset 0 1px 0 hsl(var(--glass-highlight));
   }
 
   /* Scrollbar */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted) / 0.4) transparent;
+    scrollbar-color: hsl(var(--muted) / 0.3) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-track {
@@ -189,41 +200,45 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted) / 0.4);
-    border-radius: 3px;
+    background-color: hsl(var(--muted) / 0.3);
+    border-radius: 2.5px;
     transition: background-color 0.2s;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(var(--muted) / 0.6);
+    background-color: hsl(var(--muted) / 0.5);
   }
 
-  /* Text gradient */
+  /* Text styles */
   .text-gradient {
-    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-foreground via-muted-foreground to-foreground bg-clip-text text-transparent;
     background-size: 200% auto;
-    animation: gradient-shift 8s ease infinite;
-  }
-
-  @keyframes gradient-shift {
-    0%, 100% { background-position: 0% center; }
-    50% { background-position: 100% center; }
   }
 
   .font-display {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+    font-family: 'Geist', 'Inter', -apple-system, system-ui, sans-serif;
     letter-spacing: -0.025em;
     font-weight: 600;
   }
 
-  /* Apple-style press effect */
+  /* Magnetic press effect */
   .press-effect {
     @apply transition-all duration-100;
   }
 
   .press-effect:active {
-    transform: scale(0.97);
+    transform: scale(0.95);
     opacity: 0.9;
+  }
+
+  /* Magnetic hover */
+  .magnetic-hover {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .magnetic-hover:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px hsl(0 0% 0% / 0.1);
   }
 
   /* Hover lift with glass shadow */
@@ -234,7 +249,7 @@
   .hover-lift:hover {
     transform: translateY(-2px);
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.12),
+      0 8px 32px hsl(0 0% 0% / 0.1),
       inset 0 1px 0 hsl(var(--glass-highlight));
   }
 
@@ -262,10 +277,10 @@
 
   @keyframes pulse-glow {
     0%, 100% { 
-      box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+      box-shadow: 0 0 0 0 hsl(var(--foreground) / 0.3);
     }
     50% { 
-      box-shadow: 0 0 0 8px hsl(var(--primary) / 0);
+      box-shadow: 0 0 0 6px hsl(var(--foreground) / 0);
     }
   }
 
@@ -292,6 +307,37 @@
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* Message bubble tail - Telegram style */
+  .bubble-tail-own {
+    position: relative;
+  }
+
+  .bubble-tail-own::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -6px;
+    width: 12px;
+    height: 12px;
+    background: inherit;
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+  }
+
+  .bubble-tail-other {
+    position: relative;
+  }
+
+  .bubble-tail-other::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -6px;
+    width: 12px;
+    height: 12px;
+    background: inherit;
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
   }
 }
