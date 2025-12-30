@@ -34,36 +34,38 @@ function AnimatedRoutes() {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route
-          path="/auth"
-          element={
-            <PageTransition>
-              <Auth />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
+    <div className="h-screen w-screen overflow-hidden">
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route
+            path="/auth"
+            element={
               <PageTransition>
-                <Index />
+                <Auth />
               </PageTransition>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <PageTransition>
-              <NotFound />
-            </PageTransition>
-          }
-        />
-      </Routes>
-    </AnimatePresence>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <PageTransition>
+                  <Index />
+                </PageTransition>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <PageTransition>
+                <NotFound />
+              </PageTransition>
+            }
+          />
+        </Routes>
+      </AnimatePresence>
+    </div>
   );
 }
 
