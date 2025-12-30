@@ -2,8 +2,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { AnimatePresence } from "framer-motion";
+import { PageTransition } from "@/components/PageTransition";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -28,20 +30,40 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function AppRoutes() {
+function AnimatedRoutes() {
+  const location = useLocation();
+
   return (
-    <Routes>
-      <Route path="/auth" element={<Auth />} />
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Index />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/auth"
+          element={
+            <PageTransition>
+              <Auth />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <Index />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <PageTransition>
+              <NotFound />
+            </PageTransition>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
   );
 }
 
@@ -52,7 +74,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AppRoutes />
+          <AnimatedRoutes />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

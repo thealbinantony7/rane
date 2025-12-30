@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { LinkUpLogo } from '@/components/LinkUpLogo';
 import { ProfileHub } from '@/components/ProfileHub';
+import { ConversationSkeleton } from './ConversationSkeleton';
 
 interface SidebarProps {
   conversations: Conversation[];
@@ -189,9 +190,7 @@ export const Sidebar = memo(function Sidebar({
         {/* Conversations List */}
         <div className="flex-1 overflow-y-auto scrollbar-thin p-2">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="w-6 h-6 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
-            </div>
+            <ConversationSkeleton />
           ) : (
             <>
               {pinnedConversations.length > 0 && (
