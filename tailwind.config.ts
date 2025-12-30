@@ -18,18 +18,15 @@ export default {
         display: ['Inter', '-apple-system', 'system-ui', 'sans-serif'],
       },
       spacing: {
-        // 8px grid system
-        '0.5': '4px',
-        '1': '8px',
-        '1.5': '12px',
-        '2': '16px',
-        '2.5': '20px',
-        '3': '24px',
-        '4': '32px',
-        '5': '40px',
-        '6': '48px',
-        '7': '56px',
-        '8': '64px',
+        // 8px grid helpers (does NOT override Tailwind defaults)
+        g1: "8px",
+        g2: "16px",
+        g3: "24px",
+        g4: "32px",
+        g5: "40px",
+        g6: "48px",
+        g7: "56px",
+        g8: "64px",
       },
       colors: {
         border: "hsl(var(--border))",
