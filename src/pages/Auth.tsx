@@ -114,28 +114,20 @@ export default function Auth() {
         className="w-full max-w-md relative z-10"
       >
         {/* Logo */}
-        <div className="text-center mb-10 flex flex-col items-center">
+        <div className="text-center mb-8 flex flex-col items-center">
           <motion.div
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.1 }}
             className="float"
           >
-            <LinkUpLogo size="lg" showText={false} animated />
+            <LinkUpLogo size="lg" showText animated />
           </motion.div>
-          <motion.h1 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25, duration: 0.5 }}
-            className="text-3xl font-display text-foreground mt-6 mb-1.5"
-          >
-            LINKUP
-          </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.35 }}
-            className="text-muted-foreground text-base"
+            transition={{ delay: 0.25 }}
+            className="text-muted-foreground text-base mt-4"
           >
             {isLogin ? 'Welcome back' : 'Create your account'}
           </motion.p>
@@ -311,7 +303,7 @@ export default function Auth() {
           transition={{ delay: 0.5 }}
           className="text-center text-sm text-muted-foreground mt-6"
         >
-          By continuing, you agree to LINKUP's{' '}
+          By continuing, you agree to Lucent's{' '}
           <a href="#" className="text-foreground hover:underline">Terms of Service</a>
           {' '}and{' '}
           <a href="#" className="text-primary hover:underline">Privacy Policy</a>

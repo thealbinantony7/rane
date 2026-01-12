@@ -160,7 +160,7 @@ export function ChatViewReal({
         }} className="mb-6 flex justify-center">
             <LinkUpLogo size="xl" showText={false} />
           </motion.div>
-          <h2 className="text-xl md:text-2xl font-display font-semibold text-foreground mb-2">Welcome to LINKUP</h2>
+          <h2 className="text-xl md:text-2xl font-display font-semibold text-foreground mb-2">Welcome to Lucent</h2>
           <p className="text-muted-foreground max-w-sm text-sm md:text-base">Select a conversation to start messaging.</p>
           <p className="text-xs md:text-sm text-muted-foreground/60 mt-4 hidden md:block">
             Press <kbd className="px-2 py-1 rounded bg-surface-2 font-mono text-xs">⌘K</kbd> to search
