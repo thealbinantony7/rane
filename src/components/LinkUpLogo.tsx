@@ -56,10 +56,10 @@ export function LinkUpLogo({ size = 'md', showText = true, className, animated =
 
       {showText && (
         <span className={cn(
-          'font-bold tracking-tight text-foreground uppercase',
+          'font-semibold tracking-tight text-foreground',
           sizeConfig.text
         )}>
-          LINKUP
+          Lucent
         </span>
       )}
     </div>
