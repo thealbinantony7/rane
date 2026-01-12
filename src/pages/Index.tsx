@@ -119,8 +119,8 @@ const Index = memo(function Index() {
   return (
     <>
       <Helmet>
-        <title>LINKUP - Premium Messaging Platform</title>
-        <meta name="description" content="LINKUP is a premium, real-time messaging platform with end-to-end encryption, beautiful monochrome design, and powerful features." />
+        <title>Lucent - Premium Messaging Platform</title>
+        <meta name="description" content="Lucent is a premium, real-time messaging platform with end-to-end encryption, beautiful monochrome design, and powerful features." />
       </Helmet>
 
       <MeshBackground />
